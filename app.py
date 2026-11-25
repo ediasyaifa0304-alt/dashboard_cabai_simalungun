@@ -383,12 +383,142 @@ st.sidebar.markdown(
 
 st.sidebar.divider()
 
-st.title("🌶️ DASHBOARD PRODUKSI CABAI")
-st.subheader("Kabupaten Simalungun Tahun 2021–2025")
+# =========================================
+# HERO SECTION - DASHBOARD UTAMA
+# =========================================
 
-st.write(
-    "Dashboard informasi produksi, luas panen, "
-    "dan produktivitas cabai."
+st.markdown(
+    """
+    <div style="
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+            120deg,
+            #123B2B 0%,
+            #1D6A43 58%,
+            #39865A 100%
+        );
+        border-radius: 24px;
+        padding: 38px 42px;
+        margin-bottom: 28px;
+        box-shadow: 0 12px 30px rgba(18, 59, 43, 0.16);
+        border: 1px solid rgba(255,255,255,0.12);
+    ">
+
+        <div style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        ">
+
+            <div style="
+                flex: 1;
+                min-width: 260px;
+            ">
+
+                <div style="
+                    display: inline-block;
+                    background: rgba(255,255,255,0.13);
+                    color: #DDF3E3;
+                    padding: 8px 15px;
+                    border-radius: 30px;
+                    font-size: 12px;
+                    font-weight: 750;
+                    letter-spacing: 1.5px;
+                ">
+                    PUSAT INFORMASI PERTANIAN
+                </div>
+
+                <div style="
+                    color: #FFFFFF;
+                    font-size: clamp(28px, 4vw, 43px);
+                    font-weight: 850;
+                    line-height: 1.15;
+                    margin-top: 20px;
+                    margin-bottom: 12px;
+                ">
+                    DASHBOARD PRODUKSI CABAI
+                </div>
+
+                <div style="
+                    color: #E4F2E7;
+                    font-size: 21px;
+                    font-weight: 650;
+                    margin-bottom: 14px;
+                ">
+                    Kabupaten Simalungun
+                </div>
+
+                <div style="
+                    color: #D3E8D9;
+                    font-size: 15px;
+                    line-height: 1.8;
+                    max-width: 650px;
+                ">
+                    Platform informasi dan analisis data produksi,
+                    luas panen, serta produktivitas cabai
+                    untuk periode 2021–2025.
+                </div>
+
+                <div style="
+                    display: inline-block;
+                    margin-top: 23px;
+                    padding: 9px 17px;
+                    border-radius: 9px;
+                    background: #E5F3E8;
+                    color: #17452D;
+                    font-size: 13px;
+                    font-weight: 750;
+                ">
+                    📊 PERIODE DATA 2021 — 2025
+                </div>
+
+            </div>
+
+            <div style="
+                width: 145px;
+                height: 145px;
+                min-width: 120px;
+                border-radius: 30px;
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.23);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 83px;
+            ">
+                🌶️
+            </div>
+
+        </div>
+
+        <div style="
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 50%;
+            right: -75px;
+            bottom: -130px;
+        "></div>
+
+        <div style="
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            right: 80px;
+            top: -100px;
+        "></div>
+
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # KONEKSI DATABASE NEON
