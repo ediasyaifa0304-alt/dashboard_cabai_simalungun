@@ -321,163 +321,45 @@ st.markdown(
 )
 
 # =========================================
-# MENU NAVIGASI DASHBOARD - PREMIUM
+# MENU NAVIGASI DASHBOARD - STABIL
 # =========================================
-st.sidebar.markdown(
-    textwrap.dedent("""
-    <style>
-    .sb-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 15px 12px;
-        margin-bottom: 25px;
-        background: rgba(255,255,255,0.07);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 15px;
-    }
 
-    .sb-brand-icon {
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #E5F3E8;
-        border-radius: 12px;
-        font-size: 25px;
-        flex-shrink: 0;
-    }
+st.sidebar.markdown("### 🌶️ SIMALUNGUN DASHBOARD")
 
-    .sb-brand-title {
-        color: #FFFFFF;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: 0.3px;
-    }
-
-    .sb-brand-sub {
-        color: #C8DDCE;
-        font-size: 11px;
-        margin-top: 5px;
-    }
-
-    .sb-section-title {
-        color: #A9D0B5;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: 1.6px;
-        margin: 20px 0 12px;
-    }
-
-    .sb-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .sb-nav-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 13px;
-        border-radius: 11px;
-        background: rgba(255,255,255,0.055);
-        border: 1px solid rgba(255,255,255,0.08);
-        color: #EDF6EF !important;
-        text-decoration: none !important;
-        font-size: 13px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }
-
-    .sb-nav-link:hover {
-        background: rgba(255,255,255,0.16);
-        border-color: rgba(255,255,255,0.25);
-        transform: translateX(3px);
-    }
-
-    .sb-nav-icon {
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,255,255,0.12);
-        border-radius: 9px;
-        font-size: 16px;
-        flex-shrink: 0;
-    }
-
-    </style>
-
-    <div class="sb-brand">
-
-        <div class="sb-brand-icon">🌶️</div>
-
-        <div>
-            <div class="sb-brand-title">
-                SIMALUNGUN DASHBOARD
-            </div>
-
-            <div class="sb-brand-sub">
-                Pusat Informasi Produksi Cabai
-            </div>
-        </div>
-
-    </div>
-
-    <div class="sb-section-title">
-        MENU UTAMA
-    </div>
-
-    <div class="sb-nav">
-
-        <a class="sb-nav-link" href="#ringkasan-dashboard">
-            <span class="sb-nav-icon">🏠</span>
-            <span>Ringkasan Dashboard</span>
-        </a>
-
-        <a class="sb-nav-link" href="#grafik-bulanan">
-            <span class="sb-nav-icon">📈</span>
-            <span>Tren Produksi Bulanan</span>
-        </a>
-
-        <a class="sb-nav-link" href="#perbandingan-tahunan">
-            <span class="sb-nav-icon">📊</span>
-            <span>Perbandingan Tahunan</span>
-        </a>
-
-        <a class="sb-nav-link" href="#analisis-tren-komoditas">
-            <span class="sb-nav-icon">📉</span>
-            <span>Analisis Tren Komoditas</span>
-        </a>
-
-        <a class="sb-nav-link" href="#kontribusi-komoditas">
-            <span class="sb-nav-icon">🥧</span>
-            <span>Kontribusi Komoditas</span>
-        </a>
-
-        <a class="sb-nav-link" href="#produktivitas-lahan">
-            <span class="sb-nav-icon">🌱</span>
-            <span>Produktivitas dan Luas Panen</span>
-        </a>
-
-        <a class="sb-nav-link" href="#data-bulanan">
-            <span class="sb-nav-icon">📋</span>
-            <span>Data Produksi Bulanan</span>
-        </a>
-
-    </div>
-
-    """,
-    unsafe_allow_html=True
+st.sidebar.caption(
+    "Pusat Informasi Produksi Cabai"
 )
 
-# ANCHOR RINGKASAN DASHBOARD
-st.markdown(
-    '<div id="ringkasan-dashboard"></div>',
-    unsafe_allow_html=True
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("**MENU UTAMA**")
+
+st.sidebar.markdown(
+    "[🏠 Ringkasan Dashboard](#ringkasan-dashboard)"
+)
+
+st.sidebar.markdown(
+    "[📈 Tren Produksi Bulanan](#grafik-bulanan)"
+)
+
+st.sidebar.markdown(
+    "[📊 Perbandingan Tahunan](#perbandingan-tahunan)"
+)
+
+st.sidebar.markdown(
+    "[📉 Analisis Tren Komoditas](#analisis-tren-komoditas)"
+)
+
+st.sidebar.markdown(
+    "[🥧 Kontribusi Komoditas](#kontribusi-komoditas)"
+)
+
+st.sidebar.markdown(
+    "[🌱 Produktivitas dan Luas Panen](#produktivitas-lahan)"
+)
+
+st.sidebar.markdown(
+    "[📋 Data Produksi Bulanan](#data-bulanan)"
 )
 
 st.sidebar.divider()
