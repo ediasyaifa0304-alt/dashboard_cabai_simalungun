@@ -515,13 +515,39 @@ st.download_button(
 )
 
 st.divider()
-
 st.caption(
-    "Sumber: Database Neon Pusat. "
-    "Data bulanan merupakan estimasi sebaran "
-    "berdasarkan dataset latihan, bukan observasi "
-    "bulanan resmi."
+    "Sumber data: Badan Pusat Statistik (BPS) Kabupaten Simalungun "
+    "dan data SPH-SBS. "
+    "Data mencakup periode 2021–2025, terdiri atas data bulanan "
+    "dan tahunan yang telah melalui proses pengolahan dan penyesuaian. "
+    "Data tahunan digunakan sebagai pembanding dan rekapitulasi, "
+    "sedangkan data bulanan digunakan untuk analisis perkembangan "
+    "produksi, luas panen, dan produktivitas. "
+    "Data yang merupakan hasil estimasi atau pengolahan dari data "
+    "tahunan tidak dikategorikan sebagai observasi bulanan resmi. "
+    "Database Neon PostgreSQL digunakan sebagai media penyimpanan data."
 )
+with st.expander("Sumber Data dan Metodologi Pengolahan"):
+    st.markdown("""
+    **Sumber Data**
+    - Badan Pusat Statistik (BPS) Kabupaten Simalungun.
+    - Publikasi Statistik Pertanian Tanaman Hortikultura Sayuran.
+    - Data bulanan SPH-SBS.
+
+    **Metodologi Pengolahan**
+    1. Pengumpulan data produksi cabai periode 2021–2025.
+    2. Penggabungan data bulanan dan tahunan sesuai ketersediaan sumber.
+    3. Penyesuaian satuan produksi ke dalam ton.
+    4. Pengelompokan komoditas Cabai Besar,
+       Cabai Keriting, dan Cabai Rawit.
+    5. Pengolahan data untuk analisis produksi,
+       luas panen, dan produktivitas.
+    6. Penyimpanan data menggunakan Neon PostgreSQL.
+    7. Visualisasi dan analisis melalui Streamlit.
+
+    **Catatan:** Data hasil estimasi dibedakan dari
+    data observasi resmi.
+    """)
 st.markdown(
     '<div id="analisis-tren-komoditas"></div>',
     unsafe_allow_html=True
