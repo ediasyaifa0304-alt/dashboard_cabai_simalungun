@@ -3,6 +3,21 @@ import streamlit as st
 import pandas as pd
 import psycopg2
 import plotly.express as px
+import io
+import html
+from datetime import datetime
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import cm
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle
+)
 
 st.set_page_config(
     page_title="Dashboard Cabai Simalungun",
@@ -1047,3 +1062,469 @@ else:
             "dibagi total luas panen. Nilai ini menunjukkan hasil "
             "produksi per hektare, bukan efisiensi biaya atau keuntungan."
         )
+
+# =====================================================
+# TAHAP 5 - EXPORT LAPORAN PDF DAN EXCEL
+# =====================================================
+
+st.divider()
+
+st.header("Export Laporan Profesional PDF dan Excel")
+
+# Menggunakan data yang sudah mengikuti filter dashboard
+if "filtered" in globals():
+    export_df = filtered.copy()
+elif "data" in globals():
+    export_df = data.copy()
+else:
+    st.error("Data dashboard tidak ditemukan.")
+    st.stop()
+
+# Memastikan kolom utama tersedia
+required_columns = [
+    "tahun",
+    "komoditas",
+    "produksi_ton"
+]
+
+missing_columns = [
+    col for col in required_columns
+    if col not in export_df.columns
+]
+
+if missing_columns:
+    st.error(
+        f"Kolom berikut tidak ditemukan: {missing_columns}"
+    )
+    st.stop()
+
+if export_df.empty:
+    st.warning("Tidak ada data untuk diekspor.")
+    st.stop()
+
+# Mencari kolom luas lahan
+area_col = next(
+    (
+        col for col in [
+            "luas_panen_ha",
+            "luas_lahan_ha"
+        ]
+        if col in export_df.columns
+    ),
+    None
+)
+
+# Konversi numerik
+export_df["produksi_ton"] = pd.to_numeric(
+    export_df["produksi_ton"],
+    errors="coerce"
+)
+
+if area_col:
+    export_df[area_col] = pd.to_numeric(
+        export_df[area_col],
+        errors="coerce"
+    )
+
+# =====================================================
+# RINGKASAN TAHUNAN
+# =====================================================
+
+ringkasan_tahunan = (
+    export_df.groupby("tahun", as_index=False)
+    .agg(
+        total_produksi_ton=(
+            "produksi_ton",
+            lambda x: x.sum(min_count=1)
+        )
+    )
+)
+
+if area_col:
+    luas_tahunan = (
+        export_df.groupby("tahun", as_index=False)
+        .agg(
+            total_luas_ha=(
+                area_col,
+                lambda x: x.sum(min_count=1)
+            )
+        )
+    )
+
+    ringkasan_tahunan = ringkasan_tahunan.merge(
+        luas_tahunan,
+        on="tahun",
+        how="left"
+    )
+
+    ringkasan_tahunan["produktivitas_ton_ha"] = (
+        ringkasan_tahunan["total_produksi_ton"] /
+        ringkasan_tahunan["total_luas_ha"].where(
+            ringkasan_tahunan["total_luas_ha"] > 0
+        )
+    )
+
+# =====================================================
+# RINGKASAN KOMODITAS
+# =====================================================
+
+ringkasan_komoditas = (
+    export_df.groupby("komoditas", as_index=False)
+    .agg(
+        total_produksi_ton=(
+            "produksi_ton",
+            lambda x: x.sum(min_count=1)
+        )
+    )
+    .sort_values(
+        "total_produksi_ton",
+        ascending=False
+    )
+)
+
+if area_col:
+    luas_komoditas = (
+        export_df.groupby("komoditas", as_index=False)
+        .agg(
+            total_luas_ha=(
+                area_col,
+                lambda x: x.sum(min_count=1)
+            )
+        )
+    )
+
+    ringkasan_komoditas = ringkasan_komoditas.merge(
+        luas_komoditas,
+        on="komoditas",
+        how="left"
+    )
+
+    ringkasan_komoditas["produktivitas_ton_ha"] = (
+        ringkasan_komoditas["total_produksi_ton"] /
+        ringkasan_komoditas["total_luas_ha"].where(
+            ringkasan_komoditas["total_luas_ha"] > 0
+        )
+    )
+
+# =====================================================
+# EXPORT EXCEL
+# =====================================================
+
+excel_buffer = io.BytesIO()
+
+excel_data = export_df.copy()
+
+# Menghilangkan informasi timezone agar Excel kompatibel
+for col in excel_data.columns:
+    try:
+        if excel_data[col].dt.tz is not None:
+            excel_data[col] = (
+                excel_data[col].dt.tz_localize(None)
+            )
+    except (AttributeError, TypeError):
+        pass
+
+with pd.ExcelWriter(
+    excel_buffer,
+    engine="openpyxl"
+) as writer:
+
+    excel_data.to_excel(
+        writer,
+        sheet_name="Data Produksi",
+        index=False
+    )
+
+    ringkasan_tahunan.to_excel(
+        writer,
+        sheet_name="Ringkasan Tahunan",
+        index=False
+    )
+
+    ringkasan_komoditas.to_excel(
+        writer,
+        sheet_name="Ringkasan Komoditas",
+        index=False
+    )
+
+    # Format setiap worksheet
+    for sheet in writer.sheets.values():
+
+        sheet.freeze_panes = "A2"
+        sheet.auto_filter.ref = sheet.dimensions
+
+        for column_cells in sheet.columns:
+
+            max_length = max(
+                len(str(cell.value or ""))
+                for cell in column_cells
+            )
+
+            letter = column_cells[0].column_letter
+
+            sheet.column_dimensions[letter].width = min(
+                max_length + 3,
+                35
+            )
+
+excel_buffer.seek(0)
+
+# =====================================================
+# EXPORT PDF
+# =====================================================
+
+pdf_buffer = io.BytesIO()
+
+doc = SimpleDocTemplate(
+    pdf_buffer,
+    pagesize=landscape(A4),
+    rightMargin=1.5 * cm,
+    leftMargin=1.5 * cm,
+    topMargin=1.5 * cm,
+    bottomMargin=1.5 * cm
+)
+
+styles = getSampleStyleSheet()
+story = []
+
+# Judul laporan
+story.append(
+    Paragraph(
+        "LAPORAN PRODUKSI CABAI",
+        styles["Title"]
+    )
+)
+
+story.append(
+    Paragraph(
+        "Kabupaten Simalungun",
+        styles["Heading2"]
+    )
+)
+
+story.append(Spacer(1, 10))
+
+story.append(
+    Paragraph(
+        "Tanggal laporan: " +
+        datetime.now().strftime("%d-%m-%Y %H:%M"),
+        styles["Normal"]
+    )
+)
+
+tahun_dipilih = sorted(
+    export_df["tahun"].dropna().unique().tolist()
+)
+
+komoditas_dipilih = sorted(
+    export_df["komoditas"].dropna().unique().tolist()
+)
+
+story.append(
+    Paragraph(
+        "Tahun: " + html.escape(
+            ", ".join(map(str, tahun_dipilih))
+        ),
+        styles["Normal"]
+    )
+)
+
+story.append(
+    Paragraph(
+        "Komoditas: " + html.escape(
+            ", ".join(map(str, komoditas_dipilih))
+        ),
+        styles["Normal"]
+    )
+)
+
+story.append(Spacer(1, 18))
+
+# Ringkasan utama
+total_produksi = export_df[
+    "produksi_ton"
+].sum(min_count=1)
+
+total_luas = (
+    export_df[area_col].sum(min_count=1)
+    if area_col else None
+)
+
+story.append(
+    Paragraph(
+        "RINGKASAN DATA PRODUKSI",
+        styles["Heading2"]
+    )
+)
+
+summary_data = [
+    ["Indikator", "Nilai"],
+    [
+        "Total produksi",
+        f"{total_produksi:,.2f} ton"
+    ],
+    [
+        "Total luas lahan",
+        f"{total_luas:,.2f} ha"
+        if pd.notna(total_luas) else "Tidak tersedia"
+    ],
+    [
+        "Jumlah tahun",
+        str(len(tahun_dipilih))
+    ],
+    [
+        "Jumlah komoditas",
+        str(len(komoditas_dipilih))
+    ]
+]
+
+summary_table = Table(
+    summary_data,
+    colWidths=[6 * cm, 9 * cm]
+)
+
+summary_table.setStyle(
+    TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0),
+         colors.HexColor("#174A7E")),
+        ("TEXTCOLOR", (0, 0), (-1, 0),
+         colors.white),
+        ("GRID", (0, 0), (-1, -1), 0.5,
+         colors.grey),
+        ("PADDING", (0, 0), (-1, -1), 8),
+        ("FONTNAME", (0, 0), (-1, 0),
+         "Helvetica-Bold"),
+        ("VALIGN", (0, 0), (-1, -1),
+         "MIDDLE")
+    ])
+)
+
+story.append(summary_table)
+story.append(Spacer(1, 20))
+
+# Fungsi tabel PDF
+def buat_tabel_pdf(frame):
+
+    rows = [list(frame.columns)]
+
+    for row in frame.itertuples(index=False, name=None):
+
+        values = []
+
+        for value in row:
+
+            if pd.isna(value):
+                values.append("-")
+
+            elif isinstance(value, (int, float)):
+                values.append(f"{value:,.2f}")
+
+            else:
+                values.append(str(value))
+
+        rows.append(values)
+
+    usable_width = landscape(A4)[0] - 3 * cm
+
+    widths = [
+        usable_width / len(frame.columns)
+    ] * len(frame.columns)
+
+    table = Table(
+        rows,
+        colWidths=widths,
+        repeatRows=1
+    )
+
+    table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0),
+             colors.HexColor("#174A7E")),
+            ("TEXTCOLOR", (0, 0), (-1, 0),
+             colors.white),
+            ("GRID", (0, 0), (-1, -1),
+             0.5, colors.grey),
+            ("PADDING", (0, 0), (-1, -1), 7),
+            ("FONTSIZE", (0, 0), (-1, -1), 8),
+            ("VALIGN", (0, 0), (-1, -1),
+             "MIDDLE"),
+            ("FONTNAME", (0, 0), (-1, 0),
+             "Helvetica-Bold")
+        ])
+    )
+
+    return table
+
+# Tabel produksi tahunan
+story.append(
+    Paragraph(
+        "RINGKASAN PRODUKSI TAHUNAN",
+        styles["Heading2"]
+    )
+)
+
+story.append(
+    buat_tabel_pdf(ringkasan_tahunan)
+)
+
+story.append(Spacer(1, 20))
+
+# Tabel produksi komoditas
+story.append(
+    Paragraph(
+        "PRODUKSI BERDASARKAN KOMODITAS",
+        styles["Heading2"]
+    )
+)
+
+story.append(
+    buat_tabel_pdf(ringkasan_komoditas)
+)
+
+story.append(Spacer(1, 20))
+
+story.append(
+    Paragraph(
+        "Sumber: Database Neon Pusat. "
+        "Laporan dibuat berdasarkan filter dashboard "
+        "yang dipilih pengguna.",
+        styles["Italic"]
+    )
+)
+
+doc.build(story)
+
+pdf_buffer.seek(0)
+
+# =====================================================
+# TOMBOL DOWNLOAD
+# =====================================================
+
+st.subheader("Download Laporan")
+
+col_pdf, col_excel = st.columns(2)
+
+with col_pdf:
+
+    st.download_button(
+        label="Download Laporan PDF",
+        data=pdf_buffer.getvalue(),
+        file_name="laporan_produksi_cabai.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+        key="download_laporan_pdf"
+    )
+
+with col_excel:
+
+    st.download_button(
+        label="Download Data Excel",
+        data=excel_buffer.getvalue(),
+        file_name="laporan_produksi_cabai.xlsx",
+        mime=(
+            "application/vnd.openxmlformats-officedocument."
+            "spreadsheetml.sheet"
+        ),
+        use_container_width=True,
+        key="download_laporan_excel"
+    )
