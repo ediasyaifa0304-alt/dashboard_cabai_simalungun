@@ -2993,6 +2993,100 @@ else:
                     "menggambarkan hasil produksi per hektare, "
                     "bukan efisiensi biaya maupun keuntungan."
                 )
+
+# =====================================================
+# MEMBUAT RINGKASAN TAHUNAN DAN KOMODITAS
+# =====================================================
+
+# Pastikan variabel area_col tersedia
+if "area_col" not in locals():
+    area_col = None
+
+# -----------------------------------------
+# RINGKASAN PRODUKSI TAHUNAN
+# -----------------------------------------
+
+ringkasan_tahunan = (
+    export_df.groupby("tahun", as_index=False)
+    .agg(
+        total_produksi_ton=(
+            "produksi_ton",
+            lambda x: x.sum(min_count=1)
+        )
+    )
+)
+
+# Tambahkan luas panen dan produktivitas
+if area_col and area_col in export_df.columns:
+
+    luas_tahunan = (
+        export_df.groupby("tahun", as_index=False)
+        .agg(
+            total_luas_ha=(
+                area_col,
+                lambda x: x.sum(min_count=1)
+            )
+        )
+    )
+
+    ringkasan_tahunan = ringkasan_tahunan.merge(
+        luas_tahunan,
+        on="tahun",
+        how="left"
+    )
+
+    ringkasan_tahunan["produktivitas_ton_ha"] = (
+        ringkasan_tahunan["total_produksi_ton"] /
+        ringkasan_tahunan["total_luas_ha"].where(
+            ringkasan_tahunan["total_luas_ha"] > 0
+        )
+    )
+
+
+# -----------------------------------------
+# RINGKASAN PRODUKSI KOMODITAS
+# -----------------------------------------
+
+ringkasan_komoditas = (
+    export_df.groupby("komoditas", as_index=False)
+    .agg(
+        total_produksi_ton=(
+            "produksi_ton",
+            lambda x: x.sum(min_count=1)
+        )
+    )
+    .sort_values(
+        "total_produksi_ton",
+        ascending=False
+    )
+)
+
+# Tambahkan luas panen dan produktivitas
+if area_col and area_col in export_df.columns:
+
+    luas_komoditas = (
+        export_df.groupby("komoditas", as_index=False)
+        .agg(
+            total_luas_ha=(
+                area_col,
+                lambda x: x.sum(min_count=1)
+            )
+        )
+    )
+
+    ringkasan_komoditas = ringkasan_komoditas.merge(
+        luas_komoditas,
+        on="komoditas",
+        how="left"
+    )
+
+    ringkasan_komoditas["produktivitas_ton_ha"] = (
+        ringkasan_komoditas["total_produksi_ton"] /
+        ringkasan_komoditas["total_luas_ha"].where(
+            ringkasan_komoditas["total_luas_ha"] > 0
+        )
+    )
+
 # =====================================================
 # EXPORT EXCEL
 # =====================================================
