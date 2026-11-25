@@ -1739,25 +1739,71 @@ else:
                     }
                 )
 
-                st.dataframe(
-                    tren[
-                        [
-                            "komoditas",
-                            "Produksi awal (ton)",
-                            "Produksi akhir (ton)",
-                            "Perubahan (%)",
-                            "Status tren",
-                        ]
-                    ].rename(
-                        columns={
-                            "komoditas": "Komoditas",
-                        }
-                    ),
-                    use_container_width=True,
-                    hide_index=True,
+             
+                # =====================================
+                # TABEL PERBANDINGAN PRODUKSI KOMODITAS
+                # =====================================
+
+                tabel_tren = tren[
+                    [
+                        "komoditas",
+                        "Produksi awal (ton)",
+                        "Produksi akhir (ton)",
+                        "Perubahan (%)",
+                        "Status tren",
+                    ]
+                ].rename(
+                    columns={
+                        "komoditas": "Komoditas",
+                        "Produksi awal (ton)": "Produksi Awal (Ton)",
+                        "Produksi akhir (ton)": "Produksi Akhir (Ton)",
+                        "Perubahan (%)": "Perubahan (%)",
+                        "Status tren": "Status Tren",
+                    }
                 )
 
-                # INSIGHT PRODUKSI
+                st.dataframe(
+                    tabel_tren,
+                    use_container_width=True,
+                    hide_index=True,
+                    height=220,
+
+                    column_config={
+                        "Komoditas":
+                            st.column_config.TextColumn(
+                                "Jenis Komoditas"
+                            ),
+
+                        "Produksi Awal (Ton)":
+                            st.column_config.NumberColumn(
+                                "Produksi Awal (Ton)",
+                                format="%.2f"
+                            ),
+
+                        "Produksi Akhir (Ton)":
+                            st.column_config.NumberColumn(
+                                "Produksi Akhir (Ton)",
+                                format="%.2f"
+                            ),
+
+                        "Perubahan (%)":
+                            st.column_config.NumberColumn(
+                                "Perubahan (%)",
+                                format="%.2f%%"
+                            ),
+
+                        "Status Tren":
+                            st.column_config.TextColumn(
+                                "Status Tren"
+                            )
+                    }
+                )
+
+             
+                # =====================================
+                # INSIGHT PERUBAHAN PRODUKSI - PREMIUM
+                # =====================================
+
                 tertinggi = tren.loc[
                     tren["Perubahan (%)"].idxmax()
                 ]
@@ -1766,21 +1812,58 @@ else:
                     tren["Perubahan (%)"].idxmin()
                 ]
 
-                st.subheader("Insight Perubahan Produksi")
-
-                c1, c2 = st.columns(2)
-
-                c1.metric(
-                    "Perubahan Produksi Tertinggi",
-                    tertinggi["komoditas"],
-                    f'{tertinggi["Perubahan (%)"]:+.2f}%'
+                st.subheader(
+                    "Insight Perubahan Produksi"
                 )
 
-                c2.metric(
-                    "Perubahan Produksi Terendah",
-                    terendah["komoditas"],
-                    f'{terendah["Perubahan (%)"]:+.2f}%'
+                c1, c2 = st.columns(2, gap="large")
+
+                # KARTU PERUBAHAN RELATIF TERTINGGI
+                with c1:
+                    with st.container(border=True):
+
+                        st.caption(
+                            "📈 PERUBAHAN RELATIF TERTINGGI"
+                        )
+
+                        st.metric(
+                            label="Komoditas",
+                            value=str(tertinggi["komoditas"]),
+                            delta=f'{tertinggi["Perubahan (%)"]:+.2f}%'
+                        )
+
+                        st.caption(
+                            f"Periode {int(tahun_awal)}–{int(tahun_akhir)}"
+                        )
+
+                # KARTU PERUBAHAN RELATIF TERENDAH
+                with c2:
+                    with st.container(border=True):
+
+                        st.caption(
+                            "📉 PERUBAHAN RELATIF TERENDAH"
+                        )
+
+                        st.metric(
+                            label="Komoditas",
+                            value=str(terendah["komoditas"]),
+                            delta=f'{terendah["Perubahan (%)"]:+.2f}%'
+                        )
+
+                        st.caption(
+                            f"Periode {int(tahun_awal)}–{int(tahun_akhir)}"
+                        )
+
+                st.caption(
+                    "Interpretasi: Perubahan relatif tertinggi "
+                    "menunjukkan persentase perubahan paling besar, "
+                    "sedangkan perubahan relatif terendah menunjukkan "
+                    "persentase perubahan paling kecil. "
+                    "Apabila seluruh komoditas mengalami penurunan, "
+                    "nilai tertinggi berarti penurunan paling kecil, "
+                    "bukan peningkatan produksi."
                 )
+
 
     st.divider()
 
@@ -1812,42 +1895,192 @@ else:
             ].map(lambda x: f"{x:.2f} ton/ha")
         )
 
+     
+        # =========================================
+        # GRAFIK PRODUKTIVITAS KOMODITAS - PREMIUM
+        # =========================================
+
         fig_produktivitas = px.bar(
             produktivitas_komoditas,
+
             x="rata_rata_produktivitas",
             y="komoditas",
+
             orientation="h",
+
+            color="komoditas",
+
             text="Label",
+
+            color_discrete_map={
+                "Cabai Besar": "#176B4D",
+                "Cabai Keriting": "#E0B04C",
+                "Cabai Rawit": "#4E79A7"
+            },
+
             labels={
                 "komoditas": "Jenis Cabai",
                 "rata_rata_produktivitas":
-                    "Produktivitas (Ton/Ha)",
-            },
+                    "Produktivitas (Ton/Ha)"
+            }
         )
 
+        # PENGATURAN BATANG DAN TOOLTIP
+        fig_produktivitas.update_traces(
+
+            textposition="outside",
+
+            cliponaxis=False,
+
+            marker_line_color="#FFFFFF",
+
+            marker_line_width=1.5,
+
+            hovertemplate=(
+                "Komoditas: %{y}<br>"
+                "Produktivitas: %{x:.2f} Ton/Ha"
+                "<extra></extra>"
+            )
+        )
+
+        # PENGATURAN TAMPILAN GRAFIK
         fig_produktivitas.update_layout(
-            height=350,
-            margin=dict(
-                l=10, r=10, t=30, b=10
+
+            template="plotly_white",
+
+            height=420,
+
+            autosize=True,
+
+            paper_bgcolor="rgba(0,0,0,0)",
+
+            plot_bgcolor="#FFFFFF",
+
+            font=dict(
+                family="Arial, sans-serif",
+                size=12,
+                color="#365344"
             ),
+
+            showlegend=False,
+
+            margin=dict(
+                l=25,
+                r=85,
+                t=45,
+                b=55
+            ),
+
+            bargap=0.45
         )
 
+        # PENGATURAN SUMBU X
+        fig_produktivitas.update_xaxes(
+
+            title="Produktivitas (Ton/Ha)",
+
+            rangemode="tozero",
+
+            gridcolor="#E7EEE9",
+
+            zeroline=False,
+
+            tickformat=".2f"
+        )
+
+        # PENGATURAN SUMBU Y
+        fig_produktivitas.update_yaxes(
+
+            title="Jenis Komoditas",
+
+            showgrid=False
+        )
+
+        # TAMPILKAN GRAFIK
         st.plotly_chart(
             fig_produktivitas,
-            use_container_width=True
+            use_container_width=True,
+            config={
+                "displayModeBar": True,
+                "displaylogo": False,
+                "responsive": True
+            }
         )
 
-        terbaik = produktivitas_komoditas.loc[
-            produktivitas_komoditas[
-                "rata_rata_produktivitas"
-            ].idxmax()
-        ]
+        # =========================================
+        # INSIGHT PRODUKTIVITAS KOMODITAS
+        # =========================================
 
-        st.info(
-            f"Komoditas dengan rata-rata produktivitas "
-            f"tertinggi adalah **{terbaik['komoditas']}**, "
-            f"dengan produktivitas sebesar "
-            f"**{terbaik['rata_rata_produktivitas']:.2f} ton/ha**."
+        produktivitas_tertinggi = (
+            produktivitas_komoditas.loc[
+                produktivitas_komoditas[
+                    "rata_rata_produktivitas"
+                ].idxmax()
+            ]
+        )
+
+        produktivitas_terendah = (
+            produktivitas_komoditas.loc[
+                produktivitas_komoditas[
+                    "rata_rata_produktivitas"
+                ].idxmin()
+            ]
+        )
+
+        st.subheader(
+            "Ringkasan Produktivitas Komoditas"
+        )
+
+        col1, col2 = st.columns(2, gap="large")
+
+        # PRODUKTIVITAS TERTINGGI
+        with col1:
+
+            with st.container(border=True):
+
+                st.caption(
+                    "🏆 PRODUKTIVITAS TERTINGGI"
+                )
+
+                st.metric(
+                    label="Rata-rata Produktivitas",
+                    value=(
+                        f"{produktivitas_tertinggi['rata_rata_produktivitas']:.2f} "
+                        "Ton/Ha"
+                    )
+                )
+
+                st.caption(
+                    f"Komoditas: "
+                    f"{produktivitas_tertinggi['komoditas']}"
+                )
+
+        # PRODUKTIVITAS TERENDAH
+        with col2:
+
+            with st.container(border=True):
+
+                st.caption(
+                    "📊 PRODUKTIVITAS TERENDAH"
+                )
+
+                st.metric(
+                    label="Rata-rata Produktivitas",
+                    value=(
+                        f"{produktivitas_terendah['rata_rata_produktivitas']:.2f} "
+                        "Ton/Ha"
+                    )
+                )
+
+                st.caption(
+                    f"Komoditas: "
+                    f"{produktivitas_terendah['komoditas']}"
+                )
+
+        st.caption(
+            "Peringkat produktivitas dihitung berdasarkan "
+            "rata-rata nilai produktivitas pada data yang "
+            "memenuhi filter analisis."
         )
 
     else:
