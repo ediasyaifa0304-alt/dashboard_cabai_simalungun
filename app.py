@@ -1164,15 +1164,33 @@ luas = (
 
 luas["nama_bulan"] = luas["bulan"].map(bulan_nama)
 
+
+# =========================================
+# GRAFIK LUAS PANEN - PREMIUM DESIGN
+# =========================================
+
 fig4 = px.line(
     luas,
+
     x="nama_bulan",
     y="luas_panen_ha",
+
     color="tahun",
+
     markers=True,
+
     category_orders={
         "nama_bulan": urutan_bulan
     },
+
+    color_discrete_sequence=[
+        "#176B4D",
+        "#3D9970",
+        "#E0B04C",
+        "#4E79A7",
+        "#9B6B9E"
+    ],
+
     labels={
         "nama_bulan": "Bulan",
         "luas_panen_ha": "Luas Panen (Ha)",
@@ -1180,7 +1198,91 @@ fig4 = px.line(
     }
 )
 
-st.plotly_chart(fig4, use_container_width=True)
+# PENGATURAN GARIS DAN TITIK
+fig4.update_traces(
+
+    line=dict(
+        width=3
+    ),
+
+    marker=dict(
+        size=8,
+        line=dict(
+            width=1.5,
+            color="#FFFFFF"
+        )
+    ),
+
+    hovertemplate=(
+        "Luas Panen: %{y:,.2f} Ha"
+        "<extra></extra>"
+    )
+)
+
+# PENGATURAN TAMPILAN
+fig4.update_layout(
+
+    template="plotly_white",
+
+    height=460,
+
+    autosize=True,
+
+    paper_bgcolor="rgba(0,0,0,0)",
+
+    plot_bgcolor="#FFFFFF",
+
+    font=dict(
+        family="Arial, sans-serif",
+        size=12,
+        color="#365344"
+    ),
+
+    hovermode="x unified",
+
+    margin=dict(
+        l=45,
+        r=25,
+        t=65,
+        b=45
+    ),
+
+    legend=dict(
+        title="Tahun",
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+
+    xaxis=dict(
+        title="Bulan",
+        categoryorder="array",
+        categoryarray=urutan_bulan,
+        showgrid=False,
+        linecolor="#DCE8DF"
+    ),
+
+    yaxis=dict(
+        title="Luas Panen (Ha)",
+        rangemode="tozero",
+        gridcolor="#E7EEE9",
+        zeroline=False,
+        tickformat=",.0f"
+    )
+)
+
+# TAMPILKAN GRAFIK
+st.plotly_chart(
+    fig4,
+    use_container_width=True,
+    config={
+        "displayModeBar": True,
+        "displaylogo": False,
+        "responsive": True
+    }
+)
 
 st.markdown(
     '<div id="data-bulanan"></div>',
