@@ -2998,7 +2998,7 @@ else:
 # =====================================================
 
 excel_buffer = io.BytesIO()
-
+export_df = data.copy()
 excel_data = export_df.copy()
 
 # Menghilangkan informasi timezone agar Excel kompatibel
