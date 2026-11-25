@@ -1030,20 +1030,123 @@ komoditas_data = (
     )["produksi_ton"].sum()
 )
 
+
+# =========================================
+# PRODUKSI BERDASARKAN KOMODITAS - PREMIUM
+# =========================================
+
 fig3 = px.bar(
     komoditas_data,
+
     x="tahun",
     y="produksi_ton",
+
     color="komoditas",
+
     barmode="group",
+
+    category_orders={
+        "komoditas": [
+            "Cabai Besar",
+            "Cabai Keriting",
+            "Cabai Rawit"
+        ]
+    },
+
+    color_discrete_map={
+        "Cabai Besar": "#176B4D",
+        "Cabai Keriting": "#E0B04C",
+        "Cabai Rawit": "#4E79A7"
+    },
+
     labels={
-        "tahun": "Tahun",
+        "tahun": "Tahun Produksi",
         "produksi_ton": "Produksi (Ton)",
         "komoditas": "Jenis Cabai"
     }
 )
 
-st.plotly_chart(fig3, use_container_width=True)
+# PENGATURAN BATANG DAN TOOLTIP
+fig3.update_traces(
+
+    marker_line_color="#FFFFFF",
+
+    marker_line_width=1.2,
+
+    hovertemplate=(
+        "Tahun: %{x}<br>"
+        "Produksi: %{y:,.2f} Ton"
+        "<extra>%{fullData.name}</extra>"
+    )
+)
+
+# PENGATURAN LAYOUT
+fig3.update_layout(
+
+    template="plotly_white",
+
+    height=480,
+
+    autosize=True,
+
+    paper_bgcolor="rgba(0,0,0,0)",
+
+    plot_bgcolor="#FFFFFF",
+
+    font=dict(
+        family="Arial, sans-serif",
+        size=12,
+        color="#365344"
+    ),
+
+    hovermode="closest",
+
+    bargap=0.22,
+
+    bargroupgap=0.08,
+
+    margin=dict(
+        l=40,
+        r=30,
+        t=80,
+        b=50
+    ),
+
+    legend=dict(
+        title="Jenis Komoditas",
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+
+    xaxis=dict(
+        title="Tahun Produksi",
+        type="category",
+        showgrid=False,
+        linecolor="#DCE8DF"
+    ),
+
+    yaxis=dict(
+        title="Produksi (Ton)",
+        rangemode="tozero",
+        gridcolor="#E7EEE9",
+        zeroline=False,
+        tickformat=",.0f"
+    )
+)
+
+# TAMPILKAN GRAFIK
+st.plotly_chart(
+    fig3,
+    use_container_width=True,
+    config={
+        "displayModeBar": True,
+        "displaylogo": False,
+        "responsive": True
+    }
+)
 
 st.markdown(
     '<div id="produktivitas-lahan"></div>',
