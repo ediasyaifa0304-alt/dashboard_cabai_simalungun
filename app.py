@@ -2141,59 +2141,181 @@ else:
             ascending=False
         )
 
-        # GRAFIK KONTRIBUSI
-        st.subheader("Persentase Kontribusi Produksi")
+       
+        # =========================================
+        # GRAFIK KONTRIBUSI - PREMIUM DONUT
+        # =========================================
+
+        st.subheader(
+            "Persentase Kontribusi Produksi"
+        )
 
         fig_kontribusi = px.pie(
             kontribusi,
+
             names="komoditas",
             values="total_produksi",
-            hole=0.55,
-            title="Distribusi Produksi Berdasarkan Komoditas"
+
+            hole=0.62,
+
+            color="komoditas",
+
+            color_discrete_map={
+                "Cabai Besar": "#176B4D",
+                "Cabai Keriting": "#E0B04C",
+                "Cabai Rawit": "#4E79A7"
+            }
         )
 
+        # PENGATURAN DIAGRAM
         fig_kontribusi.update_traces(
+
+            sort=False,
+
+            direction="clockwise",
+
             textposition="inside",
-            textinfo="percent+label",
+
+            textinfo="percent",
+
+            textfont=dict(
+                size=13,
+                color="#FFFFFF"
+            ),
+
+            marker=dict(
+                line=dict(
+                    color="#FFFFFF",
+                    width=3
+                )
+            ),
+
             hovertemplate=(
-                "%{label}<br>"
-                "Produksi: %{value:,.2f} ton<br>"
+                "<b>%{label}</b><br>"
+                "Produksi: %{value:,.2f} Ton<br>"
                 "Kontribusi: %{percent}"
                 "<extra></extra>"
             )
         )
 
+        # PENGATURAN LAYOUT
         fig_kontribusi.update_layout(
-            height=430,
-            margin=dict(
-                l=10, r=10, t=60, b=10
+
+            template="plotly_white",
+
+            height=460,
+
+            paper_bgcolor="rgba(0,0,0,0)",
+
+            plot_bgcolor="#FFFFFF",
+
+            font=dict(
+                family="Arial, sans-serif",
+                size=12,
+                color="#365344"
             ),
-            legend_title_text="Komoditas"
+
+            showlegend=True,
+
+            legend=dict(
+                title="Jenis Komoditas",
+                orientation="h",
+                yanchor="bottom",
+                y=-0.12,
+                xanchor="center",
+                x=0.5
+            ),
+
+            margin=dict(
+                l=25,
+                r=25,
+                t=35,
+                b=80
+            ),
+
+            annotations=[
+                dict(
+                    text=(
+                        f"<b>{total_produksi_semua:,.0f}</b>"
+                        "<br>Total Produksi<br>(Ton)"
+                    ),
+                    x=0.5,
+                    y=0.5,
+                    showarrow=False,
+                    font=dict(
+                        size=15,
+                        color="#17452D"
+                    )
+                )
+            ]
         )
 
+        # TAMPILKAN GRAFIK
         st.plotly_chart(
             fig_kontribusi,
-            use_container_width=True
+            use_container_width=True,
+            config={
+                "displayModeBar": True,
+                "displaylogo": False,
+                "responsive": True
+            }
         )
 
-        # METRIK UTAMA
+        # =========================================
+        # KARTU STATISTIK KONTRIBUSI - PREMIUM
+        # =========================================
+
         tertinggi_kontribusi = kontribusi.iloc[0]
 
-        col1, col2 = st.columns(2)
-
-        col1.metric(
-            "Total Produksi Seluruh Komoditas",
-            f"{total_produksi_semua:,.2f} Ton"
+        col1, col2, col3 = st.columns(
+            3,
+            gap="large"
         )
 
-        col2.metric(
-            "Kontributor Produksi Terbesar",
-            tertinggi_kontribusi["komoditas"],
-            f'{tertinggi_kontribusi["persentase"]:.2f}%'
-        )
+        # KARTU 1
+        with col1:
 
-        # TABEL KONTRIBUSI
-        st.subheader("Rincian Kontribusi Komoditas")
+            with st.container(border=True):
+
+                st.caption("TOTAL PRODUKSI")
+
+                st.metric(
+                    "Seluruh Komoditas",
+                    f"{total_produksi_semua:,.2f} Ton"
+                )
+
+        # KARTU 2
+        with col2:
+
+            with st.container(border=True):
+
+                st.caption("KONTRIBUTOR TERBESAR")
+
+                st.metric(
+                    "Jenis Komoditas",
+                    str(tertinggi_kontribusi["komoditas"])
+                )
+
+        # KARTU 3
+        with col3:
+
+            with st.container(border=True):
+
+                st.caption("PERSENTASE KONTRIBUSI")
+
+                st.metric(
+                    "Kontribusi Terbesar",
+                    f'{tertinggi_kontribusi["persentase"]:.2f}%'
+                )
+
+     
+        # =========================================
+        # TABEL KONTRIBUSI KOMODITAS - PREMIUM
+        # =========================================
+
+        st.subheader(
+            "Peringkat dan Rincian Kontribusi Komoditas"
+        )
 
         tabel_kontribusi = kontribusi[
             [
@@ -2209,30 +2331,90 @@ else:
             }
         )
 
+        # MENAMBAHKAN PERINGKAT
+        tabel_kontribusi.insert(
+            0,
+            "Peringkat",
+            range(1, len(tabel_kontribusi) + 1)
+        )
+
+        # TAMPILKAN TABEL
         st.dataframe(
+
             tabel_kontribusi,
+
             use_container_width=True,
-            hide_index=True
+
+            hide_index=True,
+
+            height=220,
+
+            column_config={
+
+                "Peringkat":
+                    st.column_config.NumberColumn(
+                        "Peringkat",
+                        format="%d"
+                    ),
+
+                "Komoditas":
+                    st.column_config.TextColumn(
+                        "Jenis Komoditas"
+                    ),
+
+                "Total Produksi (Ton)":
+                    st.column_config.NumberColumn(
+                        "Total Produksi (Ton)",
+                        format="%.2f"
+                    ),
+
+                "Kontribusi (%)":
+                    st.column_config.NumberColumn(
+                        "Kontribusi (%)",
+                        format="%.2f%%"
+                    )
+            }
         )
 
-        # NARASI OTOMATIS
-        st.subheader("Ringkasan Kontribusi")
+     
+        # =========================================
+        # RINGKASAN KONTRIBUSI - AKADEMIK
+        # =========================================
 
-        st.write(
-            f"Berdasarkan filter yang dipilih, "
-            f"komoditas **{tertinggi_kontribusi['komoditas']}** "
-            f"merupakan penyumbang produksi terbesar "
-            f"dengan total produksi sebesar "
-            f"**{tertinggi_kontribusi['total_produksi']:,.2f} ton**, "
-            f"atau setara dengan "
-            f"**{tertinggi_kontribusi['persentase']:.2f}%** "
-            f"dari total produksi seluruh komoditas."
+        st.subheader(
+            "Interpretasi Kontribusi Produksi"
         )
 
-        st.caption(
-            "Kontribusi dihitung berdasarkan total produksi "
-            "dalam periode dan komoditas yang dipilih."
-        )
+        with st.container(border=True):
+
+            st.markdown(
+                "**Ringkasan Temuan Statistik**"
+            )
+
+            st.write(
+                f"Berdasarkan data produksi yang memenuhi "
+                f"filter analisis, komoditas "
+                f"**{tertinggi_kontribusi['komoditas']}** "
+                f"memiliki kontribusi produksi terbesar."
+            )
+
+            st.write(
+                f"Total produksinya mencapai "
+                f"**{tertinggi_kontribusi['total_produksi']:,.2f} ton**, "
+                f"dengan persentase kontribusi sebesar "
+                f"**{tertinggi_kontribusi['persentase']:.2f}%** "
+                f"dari keseluruhan produksi komoditas "
+                f"yang dianalisis."
+            )
+
+            st.divider()
+
+            st.caption(
+                "Metodologi: Persentase kontribusi dihitung "
+                "dengan membandingkan total produksi setiap "
+                "komoditas terhadap total produksi seluruh "
+                "komoditas dalam data yang sedang difilter."
+            )
 
 # =====================================================
 # ANALISIS PRODUKTIVITAS DAN LUAS PANEN
@@ -2362,43 +2544,135 @@ else:
             )
         )
 
+       
+        # =========================================
+        # GRAFIK PRODUKTIVITAS KOMODITAS - PREMIUM
+        # =========================================
+
         fig_lahan = px.bar(
             produktivitas_lahan,
+
             x="komoditas",
             y="produktivitas_tertimbang",
+
             color="komoditas",
+
             text="produktivitas_tertimbang",
-            labels={
-                "komoditas": "Jenis Cabai",
-                "produktivitas_tertimbang": "Ton/Ha"
+
+            category_orders={
+                "komoditas": [
+                    "Cabai Besar",
+                    "Cabai Keriting",
+                    "Cabai Rawit"
+                ]
             },
-            title="Produktivitas Tertimbang Setiap Komoditas"
+
+            color_discrete_map={
+                "Cabai Besar": "#176B4D",
+                "Cabai Keriting": "#E0B04C",
+                "Cabai Rawit": "#4E79A7"
+            },
+
+            labels={
+                "komoditas": "Jenis Komoditas",
+                "produktivitas_tertimbang":
+                    "Produktivitas (Ton/Ha)"
+            }
         )
 
+        # LABEL ANGKA
         fig_lahan.update_traces(
-            texttemplate="%{text:.2f}",
-            textposition="outside"
+
+            texttemplate="%{y:.2f} Ton/Ha",
+
+            textposition="outside",
+
+            cliponaxis=False,
+
+            marker_line_color="#FFFFFF",
+
+            marker_line_width=1.5,
+
+            hovertemplate=(
+                "Komoditas: %{x}<br>"
+                "Produktivitas: %{y:.2f} Ton/Ha"
+                "<extra></extra>"
+            )
         )
 
+        # PENGATURAN LAYOUT
         fig_lahan.update_layout(
-            height=400,
-            margin=dict(
-                l=10, r=10, t=60, b=10
+
+            template="plotly_white",
+
+            height=440,
+
+            autosize=True,
+
+            paper_bgcolor="rgba(0,0,0,0)",
+
+            plot_bgcolor="#FFFFFF",
+
+            font=dict(
+                family="Arial, sans-serif",
+                size=12,
+                color="#365344"
             ),
-            showlegend=False
+
+            showlegend=False,
+
+            margin=dict(
+                l=45,
+                r=35,
+                t=35,
+                b=65
+            ),
+
+            bargap=0.40
         )
 
+        # SUMBU X
+        fig_lahan.update_xaxes(
+            title="Jenis Komoditas",
+            showgrid=False,
+            linecolor="#DCE8DF"
+        )
+
+        # SUMBU Y
+        fig_lahan.update_yaxes(
+            title="Produktivitas (Ton/Ha)",
+            rangemode="tozero",
+            gridcolor="#E7EEE9",
+            zeroline=False,
+            tickformat=".2f"
+        )
+
+        # TAMPILKAN GRAFIK
         st.plotly_chart(
             fig_lahan,
-            use_container_width=True
+            use_container_width=True,
+            config={
+                "displayModeBar": True,
+                "displaylogo": False,
+                "responsive": True
+            }
         )
 
+     
         # =============================================
-        # PERINGKAT PRODUKTIVITAS
+        # PERINGKAT PRODUKTIVITAS - PREMIUM TABLE
         # =============================================
 
-        st.subheader("Peringkat Produktivitas")
+        st.subheader(
+            "Peringkat Produktivitas Komoditas"
+        )
 
+        st.caption(
+            "Urutan berdasarkan produktivitas tertimbang "
+            "tertinggi hingga terendah."
+        )
+
+        # MENYIAPKAN DATA TABEL
         tabel_produktivitas = (
             produktivitas_lahan[
                 [
@@ -2420,16 +2694,59 @@ else:
             .reset_index(drop=True)
         )
 
-        tabel_produktivitas.index += 1
-
-        st.dataframe(
-            tabel_produktivitas,
-            use_container_width=True
+        # MENAMBAHKAN NOMOR PERINGKAT
+        tabel_produktivitas.insert(
+            0,
+            "Peringkat",
+            range(1, len(tabel_produktivitas) + 1)
         )
 
-        # =============================================
-        # PRODUKTIVITAS TAHUNAN
-        # =============================================
+        # MENAMPILKAN TABEL
+        st.dataframe(
+
+            tabel_produktivitas,
+
+            use_container_width=True,
+
+            hide_index=True,
+
+            height=260,
+
+            column_config={
+
+                "Peringkat":
+                    st.column_config.NumberColumn(
+                        "Peringkat",
+                        format="%d"
+                    ),
+
+                "Komoditas":
+                    st.column_config.TextColumn(
+                        "Jenis Komoditas"
+                    ),
+
+                "Total Luas Panen (Ha)":
+                    st.column_config.NumberColumn(
+                        "Total Luas Panen (Ha)",
+                        format="%.2f"
+                    ),
+
+                "Total Produksi (Ton)":
+                    st.column_config.NumberColumn(
+                        "Total Produksi (Ton)",
+                        format="%.2f"
+                    ),
+
+                "Produktivitas (Ton/Ha)":
+                    st.column_config.NumberColumn(
+                        "Produktivitas (Ton/Ha)",
+                        format="%.2f"
+                    )
+            }
+        )
+ # =================================================
+        # TAHAP 5.10C - PRODUKTIVITAS TAHUNAN
+        # =================================================
 
         st.subheader(
             "Perkembangan Produktivitas Tahunan"
@@ -2454,228 +2771,228 @@ else:
             tahunan_lahan["total_luas"] > 0
         ].copy()
 
-        tahunan_lahan[
-            "produktivitas_tertimbang"
-        ] = (
-            tahunan_lahan["total_produksi"] /
-            tahunan_lahan["total_luas"]
-        )
+        if not tahunan_lahan.empty:
 
-        fig_tahunan_lahan = px.line(
-            tahunan_lahan,
-            x="tahun",
-            y="produktivitas_tertimbang",
-            color="komoditas",
-            markers=True,
-            labels={
-                "tahun": "Tahun",
-                "produktivitas_tertimbang": "Ton/Ha",
-                "komoditas": "Jenis Cabai"
-            },
-            title="Tren Produktivitas Cabai Tahun ke Tahun"
-        )
-
-        fig_tahunan_lahan.update_layout(
-            height=400,
-            hovermode="x unified",
-            margin=dict(
-                l=10, r=10, t=60, b=10
+            tahunan_lahan[
+                "produktivitas_tertimbang"
+            ] = (
+                tahunan_lahan["total_produksi"] /
+                tahunan_lahan["total_luas"]
             )
-        )
 
-        st.plotly_chart(
-            fig_tahunan_lahan,
-            use_container_width=True
-        )
+            tahunan_lahan = tahunan_lahan.sort_values(
+                ["tahun", "komoditas"]
+            )
 
-        # =============================================
-        # INSIGHT OTOMATIS
-        # =============================================
+            fig_tahunan_lahan = px.line(
+                tahunan_lahan,
+
+                x="tahun",
+                y="produktivitas_tertimbang",
+
+                color="komoditas",
+                markers=True,
+
+                category_orders={
+                    "komoditas": [
+                        "Cabai Besar",
+                        "Cabai Keriting",
+                        "Cabai Rawit"
+                    ]
+                },
+
+                color_discrete_map={
+                    "Cabai Besar": "#176B4D",
+                    "Cabai Keriting": "#E0B04C",
+                    "Cabai Rawit": "#4E79A7"
+                },
+
+                labels={
+                    "tahun": "Tahun",
+                    "produktivitas_tertimbang":
+                        "Produktivitas (Ton/Ha)",
+                    "komoditas": "Jenis Komoditas"
+                }
+            )
+
+            fig_tahunan_lahan.update_traces(
+                line=dict(width=3),
+
+                marker=dict(
+                    size=8,
+                    line=dict(
+                        width=1.5,
+                        color="#FFFFFF"
+                    )
+                ),
+
+                hovertemplate=(
+                    "Tahun: %{x}<br>"
+                    "Produktivitas: %{y:.2f} Ton/Ha"
+                    "<extra>%{fullData.name}</extra>"
+                )
+            )
+
+            fig_tahunan_lahan.update_layout(
+                template="plotly_white",
+
+                height=460,
+
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="#FFFFFF",
+
+                font=dict(
+                    family="Arial, sans-serif",
+                    size=12,
+                    color="#365344"
+                ),
+
+                hovermode="x unified",
+
+                margin=dict(
+                    l=45,
+                    r=25,
+                    t=40,
+                    b=55
+                ),
+
+                legend=dict(
+                    title="Jenis Komoditas",
+                    orientation="h",
+                    yanchor="bottom",
+                    y=1.02,
+                    xanchor="right",
+                    x=1
+                ),
+
+                xaxis=dict(
+                    title="Tahun",
+                    dtick=1,
+                    showgrid=False,
+                    linecolor="#DCE8DF"
+                ),
+
+                yaxis=dict(
+                    title="Produktivitas (Ton/Ha)",
+                    rangemode="tozero",
+                    gridcolor="#E7EEE9",
+                    zeroline=False,
+                    tickformat=".2f"
+                )
+            )
+
+            st.plotly_chart(
+                fig_tahunan_lahan,
+                use_container_width=True,
+                config={
+                    "displayModeBar": True,
+                    "displaylogo": False,
+                    "responsive": True
+                }
+            )
+
+        else:
+
+            st.info(
+                "Data produktivitas tahunan belum tersedia."
+            )
+
+
+        # =================================================
+        # TAHAP 5.10D - INSIGHT PRODUKTIVITAS
+        # =================================================
 
         st.subheader(
             "Insight Produktivitas Lahan"
         )
 
-        komoditas_terbaik = produktivitas_lahan.iloc[0]
+        if not produktivitas_lahan.empty:
 
-        komoditas_terendah = produktivitas_lahan.iloc[-1]
-
-        i1, i2 = st.columns(2)
-
-        i1.metric(
-            "Produktivitas Tertinggi",
-            komoditas_terbaik["komoditas"],
-            f'{komoditas_terbaik["produktivitas_tertimbang"]:.2f} Ton/Ha'
-        )
-
-        i2.metric(
-            "Produktivitas Terendah",
-            komoditas_terendah["komoditas"],
-            f'{komoditas_terendah["produktivitas_tertimbang"]:.2f} Ton/Ha'
-        )
-
-        st.write(
-            f"Berdasarkan data dan filter yang dipilih, "
-            f"**{komoditas_terbaik['komoditas']}** memiliki "
-            f"produktivitas tertimbang tertinggi sebesar "
-            f"**{komoditas_terbaik['produktivitas_tertimbang']:.2f} ton/ha**."
-        )
-
-        st.write(
-            f"Sementara itu, **{komoditas_terendah['komoditas']}** "
-            f"memiliki produktivitas tertimbang terendah sebesar "
-            f"**{komoditas_terendah['produktivitas_tertimbang']:.2f} ton/ha**."
-        )
-
-        st.caption(
-            "Produktivitas tertimbang dihitung dari total produksi "
-            "dibagi total luas panen. Nilai ini menunjukkan hasil "
-            "produksi per hektare, bukan efisiensi biaya atau keuntungan."
-        )
-
-# =====================================================
-# TAHAP 5 - EXPORT LAPORAN PDF DAN EXCEL
-# =====================================================
-
-st.divider()
-
-st.header("Export Laporan Profesional PDF dan Excel")
-
-# Menggunakan data yang sudah mengikuti filter dashboard
-if "filtered" in globals():
-    export_df = filtered.copy()
-elif "data" in globals():
-    export_df = data.copy()
-else:
-    st.error("Data dashboard tidak ditemukan.")
-    st.stop()
-
-# Memastikan kolom utama tersedia
-required_columns = [
-    "tahun",
-    "komoditas",
-    "produksi_ton"
-]
-
-missing_columns = [
-    col for col in required_columns
-    if col not in export_df.columns
-]
-
-if missing_columns:
-    st.error(
-        f"Kolom berikut tidak ditemukan: {missing_columns}"
-    )
-    st.stop()
-
-if export_df.empty:
-    st.warning("Tidak ada data untuk diekspor.")
-    st.stop()
-
-# Mencari kolom luas lahan
-area_col = next(
-    (
-        col for col in [
-            "luas_panen_ha",
-            "luas_lahan_ha"
-        ]
-        if col in export_df.columns
-    ),
-    None
-)
-
-# Konversi numerik
-export_df["produksi_ton"] = pd.to_numeric(
-    export_df["produksi_ton"],
-    errors="coerce"
-)
-
-if area_col:
-    export_df[area_col] = pd.to_numeric(
-        export_df[area_col],
-        errors="coerce"
-    )
-
-# =====================================================
-# RINGKASAN TAHUNAN
-# =====================================================
-
-ringkasan_tahunan = (
-    export_df.groupby("tahun", as_index=False)
-    .agg(
-        total_produksi_ton=(
-            "produksi_ton",
-            lambda x: x.sum(min_count=1)
-        )
-    )
-)
-
-if area_col:
-    luas_tahunan = (
-        export_df.groupby("tahun", as_index=False)
-        .agg(
-            total_luas_ha=(
-                area_col,
-                lambda x: x.sum(min_count=1)
+            komoditas_terbaik = (
+                produktivitas_lahan.iloc[0]
             )
-        )
-    )
 
-    ringkasan_tahunan = ringkasan_tahunan.merge(
-        luas_tahunan,
-        on="tahun",
-        how="left"
-    )
-
-    ringkasan_tahunan["produktivitas_ton_ha"] = (
-        ringkasan_tahunan["total_produksi_ton"] /
-        ringkasan_tahunan["total_luas_ha"].where(
-            ringkasan_tahunan["total_luas_ha"] > 0
-        )
-    )
-
-# =====================================================
-# RINGKASAN KOMODITAS
-# =====================================================
-
-ringkasan_komoditas = (
-    export_df.groupby("komoditas", as_index=False)
-    .agg(
-        total_produksi_ton=(
-            "produksi_ton",
-            lambda x: x.sum(min_count=1)
-        )
-    )
-    .sort_values(
-        "total_produksi_ton",
-        ascending=False
-    )
-)
-
-if area_col:
-    luas_komoditas = (
-        export_df.groupby("komoditas", as_index=False)
-        .agg(
-            total_luas_ha=(
-                area_col,
-                lambda x: x.sum(min_count=1)
+            komoditas_terendah = (
+                produktivitas_lahan.iloc[-1]
             )
-        )
-    )
 
-    ringkasan_komoditas = ringkasan_komoditas.merge(
-        luas_komoditas,
-        on="komoditas",
-        how="left"
-    )
+            i1, i2 = st.columns(2, gap="large")
 
-    ringkasan_komoditas["produktivitas_ton_ha"] = (
-        ringkasan_komoditas["total_produksi_ton"] /
-        ringkasan_komoditas["total_luas_ha"].where(
-            ringkasan_komoditas["total_luas_ha"] > 0
-        )
-    )
+            # PRODUKTIVITAS TERTINGGI
+            with i1:
 
+                with st.container(border=True):
+
+                    st.caption(
+                        "PRODUKTIVITAS TERTINGGI"
+                    )
+
+                    st.metric(
+                        label="Produktivitas Tertimbang",
+                        value=(
+                            f"{komoditas_terbaik['produktivitas_tertimbang']:.2f} "
+                            "Ton/Ha"
+                        )
+                    )
+
+                    st.caption(
+                        f"Komoditas: "
+                        f"{komoditas_terbaik['komoditas']}"
+                    )
+
+            # PRODUKTIVITAS TERENDAH
+            with i2:
+
+                with st.container(border=True):
+
+                    st.caption(
+                        "PRODUKTIVITAS TERENDAH"
+                    )
+
+                    st.metric(
+                        label="Produktivitas Tertimbang",
+                        value=(
+                            f"{komoditas_terendah['produktivitas_tertimbang']:.2f} "
+                            "Ton/Ha"
+                        )
+                    )
+
+                    st.caption(
+                        f"Komoditas: "
+                        f"{komoditas_terendah['komoditas']}"
+                    )
+
+            # INTERPRETASI AKADEMIK
+            st.subheader(
+                "Interpretasi Produktivitas"
+            )
+
+            with st.container(border=True):
+
+                st.write(
+                    f"Berdasarkan data yang memenuhi filter "
+                    f"analisis, komoditas "
+                    f"**{komoditas_terbaik['komoditas']}** "
+                    f"memiliki produktivitas tertimbang "
+                    f"tertinggi sebesar "
+                    f"**{komoditas_terbaik['produktivitas_tertimbang']:.2f} Ton/Ha**."
+                )
+
+                st.write(
+                    f"Sementara itu, komoditas "
+                    f"**{komoditas_terendah['komoditas']}** "
+                    f"memiliki produktivitas tertimbang "
+                    f"terendah sebesar "
+                    f"**{komoditas_terendah['produktivitas_tertimbang']:.2f} Ton/Ha**."
+                )
+
+                st.caption(
+                    "Metodologi: Produktivitas tertimbang "
+                    "dihitung dengan membagi total produksi "
+                    "terhadap total luas panen. Indikator ini "
+                    "menggambarkan hasil produksi per hektare, "
+                    "bukan efisiensi biaya maupun keuntungan."
+                )
 # =====================================================
 # EXPORT EXCEL
 # =====================================================
@@ -2953,11 +3270,15 @@ story.append(
 
 story.append(Spacer(1, 20))
 
+
 story.append(
     Paragraph(
-        "Sumber: Database Neon Pusat. "
-        "Laporan dibuat berdasarkan filter dashboard "
-        "yang dipilih pengguna.",
+        "Sumber: Badan Pusat Statistik (BPS). "
+        "Data yang disajikan merupakan gabungan data "
+        "bulanan dan tahunan BPS. Laporan disusun "
+        "berdasarkan filter dashboard yang dipilih "
+        "pengguna. Produktivitas tertimbang dihitung "
+        "dari total produksi dibagi total luas panen.",
         styles["Italic"]
     )
 )
@@ -2966,38 +3287,93 @@ doc.build(story)
 
 pdf_buffer.seek(0)
 
-# =====================================================
-# TOMBOL DOWNLOAD
-# =====================================================
+# =================================================
+# DOWNLOAD LAPORAN - PROFESSIONAL
+# =================================================
 
-st.subheader("Download Laporan")
+st.divider()
 
-col_pdf, col_excel = st.columns(2)
+st.header("Unduh Laporan Penelitian")
 
+st.caption(
+    "Unduh hasil analisis berdasarkan filter data "
+    "yang sedang aktif pada dashboard."
+)
+
+col_pdf, col_excel = st.columns(
+    2,
+    gap="large"
+)
+
+# DOWNLOAD PDF
 with col_pdf:
 
-    st.download_button(
-        label="Download Laporan PDF",
-        data=pdf_buffer.getvalue(),
-        file_name="laporan_produksi_cabai.pdf",
-        mime="application/pdf",
-        use_container_width=True,
-        key="download_laporan_pdf"
-    )
+    with st.container(border=True):
 
+        st.markdown("### 📄 Laporan PDF")
+
+        st.caption(
+            "Laporan penelitian berisi ringkasan statistik, "
+            "produksi tahunan, dan kontribusi komoditas."
+        )
+
+        st.download_button(
+            label="Download Laporan PDF",
+
+            data=pdf_buffer.getvalue(),
+
+            file_name="laporan_produksi_cabai_simalungun.pdf",
+
+            mime="application/pdf",
+
+            use_container_width=True,
+
+            key="download_laporan_pdf"
+        )
+
+
+# DOWNLOAD EXCEL
 with col_excel:
 
-    st.download_button(
-        label="Download Data Excel",
-        data=excel_buffer.getvalue(),
-        file_name="laporan_produksi_cabai.xlsx",
-        mime=(
-            "application/vnd.openxmlformats-officedocument."
-            "spreadsheetml.sheet"
-        ),
-        use_container_width=True,
-        key="download_laporan_excel"
-    )
+    with st.container(border=True):
+
+        st.markdown("### 📊 Data Excel")
+
+        st.caption(
+            "Data produksi, ringkasan tahunan, dan "
+            "ringkasan komoditas dalam format Excel."
+        )
+
+        st.download_button(
+            label="Download Data Excel",
+
+            data=excel_buffer.getvalue(),
+
+            file_name="data_produksi_cabai_simalungun.xlsx",
+
+            mime=(
+                "application/vnd.openxmlformats-officedocument."
+                "spreadsheetml.sheet"
+            ),
+
+            use_container_width=True,
+
+            key="download_laporan_excel"
+        )
+
+
+# =================================================
+# REFRESH DATA NEON
+# =================================================
+
+if st.sidebar.button(
+    "🔄 Muat Ulang Data",
+    use_container_width=True
+):
+
+    st.cache_data.clear()
+    st.rerun()
+
 # REFRESH DATA NEON
 if st.sidebar.button("🔄 Muat Ulang Data", use_container_width=True):
     st.cache_data.clear()
