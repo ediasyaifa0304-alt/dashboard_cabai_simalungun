@@ -25,6 +25,168 @@ st.set_page_config(
     layout="wide"
 )
 
+# =====================================================
+# DESAIN PROFESIONAL DASHBOARD SIM-PETANI
+# =====================================================
+
+st.markdown(
+    """
+    <style>
+
+    /* BACKGROUND UTAMA */
+    .stApp {
+        background-color: #F5F8F5;
+    }
+
+    /* AREA KONTEN */
+    .block-container {
+        max-width: 1450px;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    /* SIDEBAR */
+    section[data-testid="stSidebar"] {
+        background: #FFFFFF;
+        border-right: 1px solid #E3EBE4;
+    }
+
+    section[data-testid="stSidebar"] > div {
+        padding-top: 1.5rem;
+    }
+
+    /* JUDUL UTAMA */
+    h1 {
+        color: #17452D !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.7px;
+    }
+
+    /* SUBJUDUL */
+    h2, h3 {
+        color: #24583A !important;
+        font-weight: 700 !important;
+    }
+
+    /* KARTU STATISTIK */
+    [data-testid="stMetric"] {
+        background: #FFFFFF;
+        border: 1px solid #E1EAE2;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 3px 12px rgba(30, 70, 45, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    [data-testid="stMetric"]:hover {
+        border-color: #A9CBB2;
+        box-shadow: 0 5px 16px rgba(30, 70, 45, 0.10);
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #637568 !important;
+        font-weight: 600;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #17452D !important;
+        font-size: 1.8rem !important;
+        font-weight: 800 !important;
+    }
+
+    /* TOMBOL */
+    .stButton > button,
+    .stDownloadButton > button {
+        border-radius: 10px;
+        border: 1px solid #D5E4D8;
+        font-weight: 600;
+        min-height: 42px;
+        transition: all 0.2s ease;
+    }
+
+    .stButton > button:hover,
+    .stDownloadButton > button:hover {
+        border-color: #287A48;
+        color: #287A48;
+        background-color: #F0F7F1;
+    }
+
+    /* TAB NAVIGASI */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        border-bottom: 1px solid #E1EAE2;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        font-weight: 600;
+        padding: 12px 18px;
+    }
+
+    /* GRAFIK */
+    div[data-testid="stPlotlyChart"] {
+        background: #FFFFFF;
+        border: 1px solid #E5ECE6;
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 3px 12px rgba(30, 70, 45, 0.04);
+    }
+
+    /* TABEL */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #E1EAE2;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* EXPANDER */
+    div[data-testid="stExpander"] {
+        background: #FFFFFF;
+        border: 1px solid #E1EAE2;
+        border-radius: 12px;
+    }
+
+    /* PEMBATAS */
+    hr {
+        border-color: #DDE8DF;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* CAPTION */
+    .stCaption {
+        color: #718174;
+    }
+
+    /* RESPONSIVE MOBILE */
+    @media screen and (max-width: 768px) {
+
+        .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 1rem;
+        }
+
+        [data-testid="stMetric"] {
+            padding: 12px;
+        }
+
+        [data-testid="stMetricValue"] {
+            font-size: 1.3rem !important;
+        }
+
+        h1 {
+            font-size: 1.7rem !important;
+        }
+
+        h2 {
+            font-size: 1.35rem !important;
+        }
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 st.title("🌶️ DASHBOARD PRODUKSI CABAI")
 st.subheader("Kabupaten Simalungun Tahun 2021–2025")
 
