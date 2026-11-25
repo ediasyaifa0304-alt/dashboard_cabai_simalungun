@@ -266,3 +266,107 @@ st.caption(
     "berdasarkan dataset latihan, bukan observasi "
     "bulanan resmi."
 )
+
+st.divider()
+st.header("Analisis Otomatis Produksi Cabai")
+
+if data.empty:
+    st.info("Tidak ada data untuk filter yang dipilih.")
+
+else:
+    # PRODUKSI BERDASARKAN TAHUN
+    produksi_tahunan = (
+        data.groupby("tahun")["produksi_ton"]
+        .sum()
+        .sort_index()
+    )
+
+    tahun_tertinggi = produksi_tahunan.idxmax()
+    tahun_terendah = produksi_tahunan.idxmin()
+
+    nilai_tertinggi = produksi_tahunan.max()
+    nilai_terendah = produksi_tahunan.min()
+
+    # PRODUKSI BERDASARKAN KOMODITAS
+    produksi_komoditas = (
+        data.groupby("komoditas")["produksi_ton"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
+    komoditas_tertinggi = produksi_komoditas.idxmax()
+    nilai_komoditas = produksi_komoditas.max()
+
+    # TAMPILAN METRIK
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric(
+        "Tahun Produksi Tertinggi",
+        str(int(tahun_tertinggi)),
+        f"{nilai_tertinggi:,.0f} Ton"
+    )
+
+    col2.metric(
+        "Tahun Produksi Terendah",
+        str(int(tahun_terendah)),
+        f"{nilai_terendah:,.0f} Ton"
+    )
+
+    col3.metric(
+        "Komoditas Terbesar",
+        str(komoditas_tertinggi),
+        f"{nilai_komoditas:,.0f} Ton"
+    )
+
+    # NARASI ANALISIS
+    st.subheader("Ringkasan Temuan")
+
+    st.write(
+        f"Berdasarkan filter yang dipilih, "
+        f"produksi cabai tertinggi tercatat pada tahun "
+        f"**{tahun_tertinggi}** sebesar "
+        f"**{nilai_tertinggi:,.0f} ton**."
+    )
+
+    st.write(
+        f"Produksi terendah tercatat pada tahun "
+        f"**{tahun_terendah}** sebesar "
+        f"**{nilai_terendah:,.0f} ton**."
+    )
+
+    st.write(
+        f"Komoditas dengan kontribusi produksi terbesar "
+        f"adalah **{komoditas_tertinggi}**, "
+        f"dengan total produksi "
+        f"**{nilai_komoditas:,.0f} ton**."
+    )
+
+    # PERUBAHAN PRODUKSI TAHUN AWAL DAN AKHIR
+    if len(produksi_tahunan) >= 2:
+
+        produksi_awal = produksi_tahunan.iloc[0]
+        produksi_akhir = produksi_tahunan.iloc[-1]
+
+        tahun_awal = produksi_tahunan.index[0]
+        tahun_akhir = produksi_tahunan.index[-1]
+
+        if produksi_awal != 0:
+
+            perubahan = (
+                (produksi_akhir - produksi_awal)
+                / produksi_awal
+            ) * 100
+
+            if perubahan > 0:
+                keterangan = "meningkat"
+            elif perubahan < 0:
+                keterangan = "menurun"
+            else:
+                keterangan = "tidak berubah"
+
+            st.info(
+                f"Dari tahun **{tahun_awal}** ke "
+                f"**{tahun_akhir}**, produksi "
+                f"{keterangan} sebesar "
+                f"**{abs(perubahan):.2f}%**."
+            )
