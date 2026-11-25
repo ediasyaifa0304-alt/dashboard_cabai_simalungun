@@ -68,7 +68,19 @@ Periode pengamatan: 2021–2025.
 Objek penelitian: Produksi cabai Kabupaten Simalungun.
 
 Indikator yang digunakan meliputi produksi, luas panen, dan produktivitas.
+## Dokumentasi Proyek
 
+- [Alur ETL](docs/alur-etl.md)
+- [Pengujian Integrasi](docs/pengujian-integrasi.md)
+- [Finalisasi Sistem](docs/finalisasi-sistem.md)
+
+## Teknologi
+
+Python, Pandas, Plotly, Streamlit, PostgreSQL Neon, GitHub, Google Colab.
+
+## Aplikasi
+
+Dashboard Produksi Cabai Kabupaten Simalungun 2021–2025.
 ## 8. Catatan Penggunaan
 
 Data yang masih bersifat uji coba harus diverifikasi terhadap sumber data asli sebelum digunakan sebagai hasil penelitian atau publikasi resmi.
