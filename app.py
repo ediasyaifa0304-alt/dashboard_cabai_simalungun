@@ -27,6 +27,30 @@ st.set_page_config(
 
 st.markdown(
     """
+    
+/* FINAL SIDEBAR LINK DESIGN */
+
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:link,
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:visited {
+    color: #EAF5ED !important;
+    text-decoration: none !important;
+    display: block !important;
+    padding: 10px 12px !important;
+    margin: 5px 0 !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:hover {
+    color: #FFFFFF !important;
+    background: rgba(255,255,255,0.18) !important;
+    text-decoration: none !important;
+}
+
     <style>
 
     /* =========================================
