@@ -909,19 +909,112 @@ tahunan = (
     data.groupby("tahun", as_index=False)
     ["produksi_ton"].sum()
 )
+tahunan["tahun_label"] = (
+    tahunan["tahun"].astype(int).astype(str)
+)
+
+# =========================================
+# PERBANDINGAN PRODUKSI TAHUNAN - PREMIUM
+# =========================================
 
 fig2 = px.bar(
     tahunan,
-    x="tahun",
+
+    x="tahun_label",
     y="produksi_ton",
+
+    color="tahun_label",
+
     text="produksi_ton",
+
+    color_discrete_map={
+        "2021": "#176B4D",
+        "2022": "#3D9970",
+        "2023": "#E0B04C",
+        "2024": "#4E79A7",
+        "2025": "#9B6B9E"
+    },
+
     labels={
-        "tahun": "Tahun",
+        "tahun_label": "Tahun",
         "produksi_ton": "Produksi (Ton)"
     }
 )
 
-st.plotly_chart(fig2, use_container_width=True)
+# LABEL ANGKA DI ATAS BATANG
+fig2.update_traces(
+
+    texttemplate="%{y:,.0f}",
+
+    textposition="outside",
+
+    cliponaxis=False,
+
+    marker_line_color="#FFFFFF",
+
+    marker_line_width=1.5,
+
+    hovertemplate=(
+        "Tahun: %{x}<br>"
+        "Produksi: %{y:,.2f} Ton"
+        "<extra></extra>"
+    )
+)
+
+# TAMPILAN GRAFIK
+fig2.update_layout(
+
+    template="plotly_white",
+
+    height=450,
+
+    paper_bgcolor="rgba(0,0,0,0)",
+
+    plot_bgcolor="#FFFFFF",
+
+    font=dict(
+        family="Arial, sans-serif",
+        size=12,
+        color="#365344"
+    ),
+
+    showlegend=False,
+
+    margin=dict(
+        l=35,
+        r=30,
+        t=65,
+        b=50
+    ),
+
+    bargap=0.42,
+
+    xaxis=dict(
+        title="Tahun Produksi",
+        type="category",
+        showgrid=False,
+        linecolor="#DCE8DF"
+    ),
+
+    yaxis=dict(
+        title="Produksi (Ton)",
+        rangemode="tozero",
+        gridcolor="#E7EEE9",
+        zeroline=False,
+        tickformat=",.0f"
+    )
+)
+
+# TAMPILKAN GRAFIK
+st.plotly_chart(
+    fig2,
+    use_container_width=True,
+    config={
+        "displayModeBar": True,
+        "displaylogo": False,
+        "responsive": True
+    }
+)
 
 st.markdown(
     '<div id="kontribusi-komoditas"></div>',
