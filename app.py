@@ -384,141 +384,201 @@ st.sidebar.markdown(
 st.sidebar.divider()
 
 # =========================================
-# HERO SECTION - DASHBOARD UTAMA
+# HERO SECTION - PREMIUM DASHBOARD
 # =========================================
 
-st.markdown(
+st.components.v1.html(
     """
-    <div style="
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(
-            120deg,
-            #123B2B 0%,
-            #1D6A43 58%,
-            #39865A 100%
-        );
-        border-radius: 24px;
-        padding: 38px 42px;
-        margin-bottom: 28px;
-        box-shadow: 0 12px 30px rgba(18, 59, 43, 0.16);
-        border: 1px solid rgba(255,255,255,0.12);
-    ">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        <div style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 25px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 2;
-        ">
+html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: Arial, sans-serif;
+}
 
-            <div style="
-                flex: 1;
-                min-width: 260px;
-            ">
+.hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 310px;
+    padding: 36px 42px;
+    border-radius: 23px;
+    background: linear-gradient(
+        120deg,
+        #103D2C 0%,
+        #176342 55%,
+        #39885C 100%
+    );
+    box-shadow: 0 12px 30px rgba(18,59,43,0.14);
+    border: 1px solid rgba(255,255,255,0.12);
+}
 
-                <div style="
-                    display: inline-block;
-                    background: rgba(255,255,255,0.13);
-                    color: #DDF3E3;
-                    padding: 8px 15px;
-                    border-radius: 30px;
-                    font-size: 12px;
-                    font-weight: 750;
-                    letter-spacing: 1.5px;
-                ">
-                    PUSAT INFORMASI PERTANIAN
-                </div>
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    position: relative;
+    z-index: 2;
+}
 
-                <div style="
-                    color: #FFFFFF;
-                    font-size: clamp(28px, 4vw, 43px);
-                    font-weight: 850;
-                    line-height: 1.15;
-                    margin-top: 20px;
-                    margin-bottom: 12px;
-                ">
-                    DASHBOARD PRODUKSI CABAI
-                </div>
+.hero-copy {
+    flex: 1;
+    min-width: 0;
+}
 
-                <div style="
-                    color: #E4F2E7;
-                    font-size: 21px;
-                    font-weight: 650;
-                    margin-bottom: 14px;
-                ">
-                    Kabupaten Simalungun
-                </div>
+.eyebrow {
+    display: inline-block;
+    background: rgba(255,255,255,0.14);
+    color: #E4F4E8;
+    padding: 9px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+}
 
-                <div style="
-                    color: #D3E8D9;
-                    font-size: 15px;
-                    line-height: 1.8;
-                    max-width: 650px;
-                ">
-                    Platform informasi dan analisis data produksi,
-                    luas panen, serta produktivitas cabai
-                    untuk periode 2021–2025.
-                </div>
+.hero h1 {
+    color: #FFFFFF;
+    font-size: clamp(27px, 3.4vw, 43px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 22px 0 12px;
+}
 
-                <div style="
-                    display: inline-block;
-                    margin-top: 23px;
-                    padding: 9px 17px;
-                    border-radius: 9px;
-                    background: #E5F3E8;
-                    color: #17452D;
-                    font-size: 13px;
-                    font-weight: 750;
-                ">
-                    📊 PERIODE DATA 2021 — 2025
-                </div>
+.hero h2 {
+    color: #E5F3E9;
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0 0 14px;
+}
 
+.hero-description {
+    color: #D5E9DB;
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 680px;
+}
+
+.period {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 17px;
+    border-radius: 9px;
+    background: #E6F3E9;
+    color: #17452D;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.hero-icon {
+    width: 145px;
+    height: 145px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 30px;
+    font-size: 82px;
+}
+
+.circle {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 50%;
+}
+
+.circle-one {
+    width: 250px;
+    height: 250px;
+    right: -80px;
+    bottom: -145px;
+}
+
+.circle-two {
+    width: 160px;
+    height: 160px;
+    right: 90px;
+    top: -115px;
+}
+
+@media(max-width:650px) {
+    .hero {
+        padding: 27px 23px;
+        min-height: 290px;
+    }
+
+    .hero-icon {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 27px;
+    }
+
+    .hero h2 {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-copy">
+
+            <div class="eyebrow">
+                PUSAT INFORMASI PERTANIAN
             </div>
 
-            <div style="
-                width: 145px;
-                height: 145px;
-                min-width: 120px;
-                border-radius: 30px;
-                background: rgba(255,255,255,0.12);
-                border: 1px solid rgba(255,255,255,0.23);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 83px;
-            ">
-                🌶️
+            <h1>
+                DASHBOARD PRODUKSI CABAI
+            </h1>
+
+            <h2>
+                Kabupaten Simalungun
+            </h2>
+
+            <div class="hero-description">
+                Platform informasi dan analisis data produksi,
+                luas panen, serta produktivitas cabai
+                untuk periode 2021–2025.
+            </div>
+
+            <div class="period">
+                📊 PERIODE DATA 2021 — 2025
             </div>
 
         </div>
 
-        <div style="
-            position: absolute;
-            width: 230px;
-            height: 230px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 50%;
-            right: -75px;
-            bottom: -130px;
-        "></div>
-
-        <div style="
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 50%;
-            right: 80px;
-            top: -100px;
-        "></div>
+        <div class="hero-icon">
+            🌶️
+        </div>
 
     </div>
+
+    <div class="circle circle-one"></div>
+    <div class="circle circle-two"></div>
+
+</div>
+</body>
+</html>
     """,
-    unsafe_allow_html=True
+    height=340,
+    scrolling=False
 )
 
 # KONEKSI DATABASE NEON
