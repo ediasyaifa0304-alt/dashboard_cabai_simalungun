@@ -370,3 +370,242 @@ else:
                 f"{keterangan} sebesar "
                 f"**{abs(perubahan):.2f}%**."
             )
+
+st.divider()
+st.header("Analisis Tren dan Insight Komoditas")
+
+if data.empty:
+    st.info("Belum tersedia data untuk dianalisis.")
+
+else:
+    tahun_tersedia = sorted(
+        data["tahun"].dropna().unique().tolist()
+    )
+
+    # MEMBANDINGKAN PRODUKSI AWAL DAN AKHIR
+    if len(tahun_tersedia) < 2:
+        st.info(
+            "Pilih minimal dua tahun untuk melihat "
+            "perubahan tren produksi komoditas."
+        )
+
+    else:
+        tahun_awal = tahun_tersedia[0]
+        tahun_akhir = tahun_tersedia[-1]
+
+        produksi_awal = (
+            data[data["tahun"] == tahun_awal]
+            .groupby("komoditas")["produksi_ton"]
+            .sum(min_count=1)
+            .rename("Produksi awal (ton)")
+        )
+
+        produksi_akhir = (
+            data[data["tahun"] == tahun_akhir]
+            .groupby("komoditas")["produksi_ton"]
+            .sum(min_count=1)
+            .rename("Produksi akhir (ton)")
+        )
+
+        tren = (
+            produksi_awal.to_frame()
+            .join(produksi_akhir, how="inner")
+            .reset_index()
+        )
+
+        if tren.empty:
+            st.info(
+                "Belum ada data pembanding yang lengkap "
+                "untuk komoditas yang dipilih."
+            )
+
+        else:
+            tren["Perubahan (%)"] = tren.apply(
+                lambda row: (
+                    (
+                        row["Produksi akhir (ton)"]
+                        - row["Produksi awal (ton)"]
+                    ) / row["Produksi awal (ton)"] * 100
+                )
+                if row["Produksi awal (ton)"] != 0
+                else float("nan"),
+                axis=1
+            )
+
+            tren = tren.dropna(
+                subset=["Perubahan (%)"]
+            ).copy()
+
+            if not tren.empty:
+
+                tren["Status tren"] = tren[
+                    "Perubahan (%)"
+                ].apply(
+                    lambda x: (
+                        "Meningkat" if x > 0
+                        else "Menurun" if x < 0
+                        else "Stabil"
+                    )
+                )
+
+                tren["Label"] = tren[
+                    "Perubahan (%)"
+                ].map(lambda x: f"{x:+.2f}%")
+
+                st.subheader(
+                    f"Perubahan Produksi {tahun_awal}–{tahun_akhir}"
+                )
+
+                fig_tren = px.bar(
+                    tren.sort_values("Perubahan (%)"),
+                    x="Perubahan (%)",
+                    y="komoditas",
+                    color="Status tren",
+                    text="Label",
+                    orientation="h",
+                    labels={
+                        "komoditas": "Jenis Cabai",
+                        "Perubahan (%)": "Perubahan Produksi (%)",
+                        "Status tren": "Status Tren",
+                    },
+                )
+
+                fig_tren.update_layout(
+                    height=380,
+                    margin=dict(
+                        l=10, r=10, t=30, b=10
+                    ),
+                    legend_title_text="Status Tren",
+                )
+
+                fig_tren.update_xaxes(
+                    ticksuffix="%"
+                )
+
+                st.plotly_chart(
+                    fig_tren,
+                    use_container_width=True
+                )
+
+                st.dataframe(
+                    tren[
+                        [
+                            "komoditas",
+                            "Produksi awal (ton)",
+                            "Produksi akhir (ton)",
+                            "Perubahan (%)",
+                            "Status tren",
+                        ]
+                    ].rename(
+                        columns={
+                            "komoditas": "Komoditas",
+                        }
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+                # INSIGHT PRODUKSI
+                tertinggi = tren.loc[
+                    tren["Perubahan (%)"].idxmax()
+                ]
+
+                terendah = tren.loc[
+                    tren["Perubahan (%)"].idxmin()
+                ]
+
+                st.subheader("Insight Perubahan Produksi")
+
+                c1, c2 = st.columns(2)
+
+                c1.metric(
+                    "Perubahan Produksi Tertinggi",
+                    tertinggi["komoditas"],
+                    f'{tertinggi["Perubahan (%)"]:+.2f}%'
+                )
+
+                c2.metric(
+                    "Perubahan Produksi Terendah",
+                    terendah["komoditas"],
+                    f'{terendah["Perubahan (%)"]:+.2f}%'
+                )
+
+    st.divider()
+
+    st.subheader(
+        "Perbandingan Produktivitas Komoditas"
+    )
+
+    produktivitas_komoditas = (
+        data.groupby("komoditas", as_index=False)
+        .agg(
+            rata_rata_produktivitas=(
+                "produktivitas_ton_ha", "mean"
+            )
+        )
+        .dropna(
+            subset=["rata_rata_produktivitas"]
+        )
+        .sort_values(
+            "rata_rata_produktivitas",
+            ascending=True
+        )
+    )
+
+    if not produktivitas_komoditas.empty:
+
+        produktivitas_komoditas["Label"] = (
+            produktivitas_komoditas[
+                "rata_rata_produktivitas"
+            ].map(lambda x: f"{x:.2f} ton/ha")
+        )
+
+        fig_produktivitas = px.bar(
+            produktivitas_komoditas,
+            x="rata_rata_produktivitas",
+            y="komoditas",
+            orientation="h",
+            text="Label",
+            labels={
+                "komoditas": "Jenis Cabai",
+                "rata_rata_produktivitas":
+                    "Produktivitas (Ton/Ha)",
+            },
+        )
+
+        fig_produktivitas.update_layout(
+            height=350,
+            margin=dict(
+                l=10, r=10, t=30, b=10
+            ),
+        )
+
+        st.plotly_chart(
+            fig_produktivitas,
+            use_container_width=True
+        )
+
+        terbaik = produktivitas_komoditas.loc[
+            produktivitas_komoditas[
+                "rata_rata_produktivitas"
+            ].idxmax()
+        ]
+
+        st.info(
+            f"Komoditas dengan rata-rata produktivitas "
+            f"tertinggi adalah **{terbaik['komoditas']}**, "
+            f"dengan produktivitas sebesar "
+            f"**{terbaik['rata_rata_produktivitas']:.2f} ton/ha**."
+        )
+
+    else:
+        st.info(
+            "Data produktivitas belum tersedia."
+        )
+
+    st.caption(
+        "Analisis mengikuti filter tahun, bulan, dan komoditas "
+        "yang dipilih. Insight ini menggambarkan tren produksi "
+        "dan produktivitas, bukan keuntungan ekonomi atau "
+        "rekomendasi tanam."
+    )
