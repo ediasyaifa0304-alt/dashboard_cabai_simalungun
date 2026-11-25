@@ -187,6 +187,67 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# =========================================
+# MENU NAVIGASI DASHBOARD
+# =========================================
+
+st.sidebar.markdown("### 🌶️ SIMALUNGUN DASHBOARD")
+st.sidebar.caption("Pusat Informasi Produksi Cabai")
+
+st.sidebar.markdown(
+    """
+    <div style="display:flex; flex-direction:column; gap:8px;">
+
+    <a href="#ringkasan-dashboard"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    🏠 Ringkasan Dashboard
+    </a>
+
+    <a href="#tren-bulanan"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    📈 Tren Produksi Bulanan
+    </a>
+
+    <a href="#perbandingan-tahunan"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    📊 Perbandingan Tahunan
+    </a>
+
+    <a href="#analisis-tren-komoditas"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    📉 Analisis Tren Komoditas
+    </a>
+
+    <a href="#kontribusi-komoditas"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    🥧 Kontribusi Komoditas
+    </a>
+
+    <a href="#produktivitas-lahan"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    🌱 Produktivitas dan Luas Panen
+    </a>
+
+    <a href="#data-bulanan"
+    style="display:block;padding:10px;border-radius:9px;
+    background:#EAF4EC;color:#24583A;text-decoration:none;">
+    📋 Data Produksi Bulanan
+    </a>
+
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.sidebar.divider()
+
 st.title("🌶️ DASHBOARD PRODUKSI CABAI")
 st.subheader("Kabupaten Simalungun Tahun 2021–2025")
 
