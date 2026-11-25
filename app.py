@@ -25,9 +25,6 @@ st.set_page_config(
     layout="wide"
 )
 
-st.markdown(
-    """
-    
 /* FINAL SIDEBAR LINK DESIGN */
 
 section[data-testid="stSidebar"]
@@ -51,7 +48,9 @@ section[data-testid="stSidebar"]
     text-decoration: none !important;
 }
 
-    <style>
+st.markdown(
+    """
+        <style>
 
     /* =========================================
        1. BACKGROUND UTAMA
