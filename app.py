@@ -609,3 +609,142 @@ else:
         "dan produktivitas, bukan keuntungan ekonomi atau "
         "rekomendasi tanam."
     )
+
+# =====================================================
+# ANALISIS KONTRIBUSI PRODUKSI KOMODITAS
+# =====================================================
+
+st.divider()
+
+st.header("Analisis Kontribusi Produksi Komoditas")
+
+if data.empty:
+    st.info("Data produksi belum tersedia.")
+
+else:
+    kontribusi = (
+        data.groupby("komoditas", as_index=False)
+        .agg(
+            total_produksi=(
+                "produksi_ton",
+                lambda x: x.sum(min_count=1)
+            )
+        )
+        .dropna(subset=["total_produksi"])
+    )
+
+    total_produksi_semua = (
+        kontribusi["total_produksi"].sum()
+    )
+
+    if kontribusi.empty or total_produksi_semua <= 0:
+
+        st.warning(
+            "Belum tersedia data produksi yang valid "
+            "untuk menghitung kontribusi."
+        )
+
+    else:
+
+        kontribusi["persentase"] = (
+            kontribusi["total_produksi"]
+            / total_produksi_semua
+        ) * 100
+
+        kontribusi = kontribusi.sort_values(
+            "total_produksi",
+            ascending=False
+        )
+
+        # GRAFIK KONTRIBUSI
+        st.subheader("Persentase Kontribusi Produksi")
+
+        fig_kontribusi = px.pie(
+            kontribusi,
+            names="komoditas",
+            values="total_produksi",
+            hole=0.55,
+            title="Distribusi Produksi Berdasarkan Komoditas"
+        )
+
+        fig_kontribusi.update_traces(
+            textposition="inside",
+            textinfo="percent+label",
+            hovertemplate=(
+                "%{label}<br>"
+                "Produksi: %{value:,.2f} ton<br>"
+                "Kontribusi: %{percent}"
+                "<extra></extra>"
+            )
+        )
+
+        fig_kontribusi.update_layout(
+            height=430,
+            margin=dict(
+                l=10, r=10, t=60, b=10
+            ),
+            legend_title_text="Komoditas"
+        )
+
+        st.plotly_chart(
+            fig_kontribusi,
+            use_container_width=True
+        )
+
+        # METRIK UTAMA
+        tertinggi_kontribusi = kontribusi.iloc[0]
+
+        col1, col2 = st.columns(2)
+
+        col1.metric(
+            "Total Produksi Seluruh Komoditas",
+            f"{total_produksi_semua:,.2f} Ton"
+        )
+
+        col2.metric(
+            "Kontributor Produksi Terbesar",
+            tertinggi_kontribusi["komoditas"],
+            f'{tertinggi_kontribusi["persentase"]:.2f}%'
+        )
+
+        # TABEL KONTRIBUSI
+        st.subheader("Rincian Kontribusi Komoditas")
+
+        tabel_kontribusi = kontribusi[
+            [
+                "komoditas",
+                "total_produksi",
+                "persentase"
+            ]
+        ].rename(
+            columns={
+                "komoditas": "Komoditas",
+                "total_produksi": "Total Produksi (Ton)",
+                "persentase": "Kontribusi (%)"
+            }
+        )
+
+        st.dataframe(
+            tabel_kontribusi,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        # NARASI OTOMATIS
+        st.subheader("Ringkasan Kontribusi")
+
+        st.write(
+            f"Berdasarkan filter yang dipilih, "
+            f"komoditas **{tertinggi_kontribusi['komoditas']}** "
+            f"merupakan penyumbang produksi terbesar "
+            f"dengan total produksi sebesar "
+            f"**{tertinggi_kontribusi['total_produksi']:,.2f} ton**, "
+            f"atau setara dengan "
+            f"**{tertinggi_kontribusi['persentase']:.2f}%** "
+            f"dari total produksi seluruh komoditas."
+        )
+
+        st.caption(
+            "Kontribusi dihitung berdasarkan total produksi "
+            "dalam periode dan komoditas yang dipilih."
+        )
