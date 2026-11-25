@@ -331,6 +331,46 @@ st.markdown(
         }
     }
 
+/* SIDEBAR MENU - FORCE LIGHT TEXT */
+
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a,
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:link,
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:visited {
+
+    color: #FFFFFF !important;
+
+    text-decoration: none !important;
+
+    background: rgba(255,255,255,0.09) !important;
+
+    border: 1px solid rgba(255,255,255,0.13) !important;
+
+    border-radius: 10px !important;
+
+    display: block !important;
+
+    padding: 11px 13px !important;
+
+    margin: 7px 0 !important;
+
+    font-weight: 600 !important;
+}
+
+section[data-testid="stSidebar"]
+[data-testid="stMarkdownContainer"] a:hover {
+
+    color: #FFFFFF !important;
+
+    background: rgba(255,255,255,0.22) !important;
+
+    border-color: rgba(255,255,255,0.35) !important;
+
+    text-decoration: none !important;
+}
+
     </style>
     """,
     unsafe_allow_html=True
