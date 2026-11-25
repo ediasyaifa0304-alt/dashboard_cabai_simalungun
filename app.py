@@ -2994,12 +2994,22 @@ else:
                     "bukan efisiensi biaya maupun keuntungan."
                 )
 
+
 # =====================================================
-# MEMBUAT RINGKASAN TAHUNAN DAN KOMODITAS
+# MENYIAPKAN DATA UNTUK RINGKASAN DAN EXPORT
 # =====================================================
 
-# Pastikan variabel area_col tersedia
-if "area_col" not in locals():
+# Membuat salinan data berdasarkan filter dashboard
+export_df = data.copy()
+
+# Mendeteksi kolom luas panen secara otomatis
+if "luas_panen_ha" in export_df.columns:
+    area_col = "luas_panen_ha"
+
+elif "luas_lahan_ha" in export_df.columns:
+    area_col = "luas_lahan_ha"
+
+else:
     area_col = None
 
 # -----------------------------------------
@@ -3092,7 +3102,6 @@ if area_col and area_col in export_df.columns:
 # =====================================================
 
 excel_buffer = io.BytesIO()
-export_df = data.copy()
 excel_data = export_df.copy()
 
 # Menghilangkan informasi timezone agar Excel kompatibel
@@ -3465,10 +3474,5 @@ if st.sidebar.button(
     use_container_width=True
 ):
 
-    st.cache_data.clear()
-    st.rerun()
-
-# REFRESH DATA NEON
-if st.sidebar.button("🔄 Muat Ulang Data", use_container_width=True):
     st.cache_data.clear()
     st.rerun()
