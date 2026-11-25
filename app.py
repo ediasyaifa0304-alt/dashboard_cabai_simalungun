@@ -789,15 +789,29 @@ produksi = (
 
 produksi["nama_bulan"] = produksi["bulan"].map(bulan_nama)
 
+# =========================================
+# GRAFIK PRODUKSI BULANAN - PREMIUM
+# =========================================
+
 fig1 = px.line(
     produksi,
     x="nama_bulan",
     y="produksi_ton",
     color="tahun",
     markers=True,
+
     category_orders={
         "nama_bulan": urutan_bulan
     },
+
+    color_discrete_sequence=[
+        "#176B4D",
+        "#3D9970",
+        "#E0B04C",
+        "#4E79A7",
+        "#9B6B9E"
+    ],
+
     labels={
         "nama_bulan": "Bulan",
         "produksi_ton": "Produksi (Ton)",
@@ -805,12 +819,89 @@ fig1 = px.line(
     }
 )
 
-st.plotly_chart(fig1, use_container_width=True)
+# PENGATURAN GARIS DAN TITIK DATA
+fig1.update_traces(
+    line=dict(width=3),
 
-st.markdown(
-    '<div id="perbandingan-tahunan"></div>',
-    unsafe_allow_html=True
+    marker=dict(
+        size=8,
+        line=dict(
+            width=1.5,
+            color="#FFFFFF"
+        )
+    ),
+
+    hovertemplate=(
+        "Produksi: %{y:,.2f} Ton"
+        "<extra></extra>"
+    )
 )
+
+# PENGATURAN TAMPILAN GRAFIK
+fig1.update_layout(
+
+    template="plotly_white",
+
+    height=480,
+
+    autosize=True,
+
+    paper_bgcolor="rgba(0,0,0,0)",
+
+    plot_bgcolor="#FFFFFF",
+
+    font=dict(
+        family="Arial, sans-serif",
+        size=12,
+        color="#365344"
+    ),
+
+    hovermode="x unified",
+
+    margin=dict(
+        l=35,
+        r=25,
+        t=65,
+        b=45
+    ),
+
+    legend=dict(
+        title="Tahun Produksi",
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+
+    xaxis=dict(
+        title="Bulan",
+        categoryorder="array",
+        categoryarray=urutan_bulan,
+        showgrid=False,
+        linecolor="#DCE8DF"
+    ),
+
+    yaxis=dict(
+        title="Produksi (Ton)",
+        rangemode="tozero",
+        gridcolor="#E7EEE9",
+        zeroline=False,
+        tickformat=",.0f"
+    )
+)
+
+# TAMPILKAN GRAFIK
+st.plotly_chart(
+    fig1,
+    use_container_width=True,
+    config={
+        "displayModeBar": True,
+        "displaylogo": False,
+        "responsive": True
+    }
+)
+
 # GRAFIK PRODUKSI TAHUNAN
 st.header("Perbandingan Produksi Tahunan")
 
