@@ -36,56 +36,61 @@ st.markdown(
         color-scheme: light;
     }
 
-    .stApp {
-        background: linear-gradient(
-            135deg,
-            #F3F7F2 0%,
-            #EAF2EC 52%,
-            #F8FAF7 100%
-        );
-        color: #24372C;
-    }
+   
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #0B1422 0%,
+        #14263D 55%,
+        #1B314B 100%
+    );
 
-    [data-testid="stAppViewContainer"] {
-        background: transparent;
-    }
+    color: #EDF3F8;
+}
 
-    [data-testid="stHeader"] {
-        background: transparent;
-    }
+[data-testid="stAppViewContainer"] {
+    background: transparent;
+}
 
-    .block-container {
-        max-width: 1500px;
-        padding-top: 1.7rem;
-        padding-bottom: 3rem;
-    }
+[data-testid="stHeader"] {
+    background: rgba(11, 20, 34, 0.95);
+}
 
+[data-testid="stHeader"] * {
+    color: #FFFFFF !important;
+}
 
-    /* =========================================
-       2. WARNA TEKS UTAMA
-    ========================================= */
+/* =========================================
+   2. WARNA TEKS UTAMA - MIDNIGHT NAVY
+========================================= */
 
-    .main,
-    .main p,
-    .main li,
-    .main label,
-    .main [data-testid="stMarkdownContainer"],
-    .main [data-testid="stCaptionContainer"] {
-        color: #26392E !important;
-    }
+.main,
+.main p,
+.main li,
+.main label,
+.main [data-testid="stMarkdownContainer"] {
+    color: #EDF3F8 !important;
+}
 
-    .main h1 {
-        color: #17452D !important;
-        font-weight: 800 !important;
-        letter-spacing: -0.8px;
-    }
+.main h1,
+.main h2,
+.main h3 {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
 
-    .main h2,
-    .main h3 {
-        color: #24583A !important;
-        font-weight: 750 !important;
-    }
+.main [data-testid="stCaptionContainer"] {
+    color: #AEBFD1 !important;
+}
 
+.main a {
+    color: #79C99A !important;
+}
+
+.main strong,
+.main b {
+    color: #FFFFFF !important;
+}
 
     /* =========================================
        3. SIDEBAR HIJAU TUA
@@ -158,12 +163,9 @@ st.markdown(
 ========================================= */
 
 [data-testid="stMetric"] {
-    background: linear-gradient(
-        145deg,
-        #FFFFFF 0%,
-        #F0F8F2 100%
-    ) !important;
-
+    [data-testid="stMetricValue"] {
+    color: #16472E !important;
+}
     border: 1px solid #D6E7DA !important;
     border-left: 5px solid #238653 !important;
 
@@ -232,27 +234,32 @@ st.markdown(
        6. TAB NAVIGASI
     ========================================= */
 
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        border-bottom: 1px solid #D9E6DC;
-    }
+    
+/* =========================================
+   6. TAB NAVIGASI - NAVY CORPORATE
+========================================= */
 
-    .stTabs [data-baseweb="tab"] {
-        background: #E8F1EA;
-        color: #315C42 !important;
-        border-radius: 10px 10px 0 0;
-        padding: 11px 17px;
-        font-weight: 700;
-    }
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    border-bottom: 1px solid #40536B;
+}
 
-    .stTabs [aria-selected="true"] {
-        background: #1D6A43 !important;
-        color: #FFFFFF !important;
-    }
+.stTabs [data-baseweb="tab"] {
+    background: #263A52;
+    color: #E4ECF5 !important;
+    border-radius: 10px 10px 0 0;
+    padding: 11px 17px;
+    font-weight: 700;
+}
 
-    .stTabs [aria-selected="true"] * {
-        color: #FFFFFF !important;
-    }
+.stTabs [aria-selected="true"] {
+    background: #1D6A43 !important;
+    color: #FFFFFF !important;
+}
+
+.stTabs [aria-selected="true"] * {
+    color: #FFFFFF !important;
+}
 
 
     /* =========================================
@@ -280,27 +287,35 @@ st.markdown(
     }
 
 
-    /* =========================================
-       9. EXPANDER
-    ========================================= */
+    
+/* =========================================
+   9. EXPANDER
+========================================= */
 
-    div[data-testid="stExpander"] {
-        background: #FFFFFF;
-        border: 1px solid #DCE8DE;
-        border-radius: 13px;
-    }
+div[data-testid="stExpander"] {
+    background: #FFFFFF;
+    border: 1px solid #40536B;
+    border-radius: 13px;
+}
+
+div[data-testid="stExpander"],
+div[data-testid="stExpander"] p,
+div[data-testid="stExpander"] li,
+div[data-testid="stExpander"] label,
+div[data-testid="stExpander"] [data-testid="stMarkdownContainer"] {
+    color: #263747 !important;
+}
 
 
     /* =========================================
        10. PEMBATAS
     ========================================= */
 
-    hr {
-        border-color: #D6E4D9;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
+  hr {
+    border-color: #40536B;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
 
     /* =========================================
        11. RESPONSIVE MOBILE
