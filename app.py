@@ -1634,35 +1634,109 @@ else:
                     f"Perubahan Produksi {tahun_awal}–{tahun_akhir}"
                 )
 
+                
+                # =====================================
+                # GRAFIK PERUBAHAN PRODUKSI - PREMIUM
+                # =====================================
+
                 fig_tren = px.bar(
                     tren.sort_values("Perubahan (%)"),
+
                     x="Perubahan (%)",
                     y="komoditas",
+
                     color="Status tren",
                     text="Label",
+
                     orientation="h",
+
+                    color_discrete_map={
+                        "Meningkat": "#238B57",
+                        "Menurun": "#D95B55",
+                        "Stabil": "#D9A441"
+                    },
+
                     labels={
                         "komoditas": "Jenis Cabai",
                         "Perubahan (%)": "Perubahan Produksi (%)",
-                        "Status tren": "Status Tren",
-                    },
+                        "Status tren": "Status Tren"
+                    }
                 )
 
+                # PENGATURAN BATANG DAN TOOLTIP
+                fig_tren.update_traces(
+                    textposition="outside",
+                    cliponaxis=False,
+
+                    marker_line_color="#FFFFFF",
+                    marker_line_width=1.2,
+
+                    hovertemplate=(
+                        "Komoditas: %{y}<br>"
+                        "Perubahan: %{x:+.2f}%"
+                        "<extra></extra>"
+                    )
+                )
+
+                # PENGATURAN LAYOUT
                 fig_tren.update_layout(
-                    height=380,
-                    margin=dict(
-                        l=10, r=10, t=30, b=10
+                    template="plotly_white",
+
+                    height=420,
+
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="#FFFFFF",
+
+                    font=dict(
+                        family="Arial, sans-serif",
+                        size=12,
+                        color="#365344"
                     ),
-                    legend_title_text="Status Tren",
+
+                    hovermode="closest",
+
+                    margin=dict(
+                        l=25,
+                        r=65,
+                        t=65,
+                        b=45
+                    ),
+
+                    legend=dict(
+                        title="Status Tren",
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    )
                 )
 
+                # SUMBU X
                 fig_tren.update_xaxes(
-                    ticksuffix="%"
+                    title="Perubahan Produksi (%)",
+                    ticksuffix="%",
+                    zeroline=True,
+                    zerolinewidth=1.5,
+                    zerolinecolor="#9BAFA2",
+                    gridcolor="#E7EEE9"
                 )
 
+                # SUMBU Y
+                fig_tren.update_yaxes(
+                    title="Komoditas",
+                    showgrid=False
+                )
+
+                # TAMPILKAN GRAFIK
                 st.plotly_chart(
                     fig_tren,
-                    use_container_width=True
+                    use_container_width=True,
+                    config={
+                        "displayModeBar": True,
+                        "displaylogo": False,
+                        "responsive": True
+                    }
                 )
 
                 st.dataframe(
