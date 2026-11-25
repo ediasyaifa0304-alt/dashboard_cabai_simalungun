@@ -28,10 +28,10 @@ def ambil_data():
 
     try:
         df = pd.read_sql_query("""
-            SELECT *
-            FROM produksi_cabai_pusat
-            ORDER BY tahun, bulan
-        """, conn)
+    SELECT *
+    FROM dw.vw_produksi_bulanan
+    ORDER BY tahun, bulan, komoditas
+""", conn)
 
         return df
 
