@@ -1302,10 +1302,53 @@ kolom = [
     "produktivitas_ton_ha"
 ]
 
+# =========================================
+# TABEL DATA PRODUKSI CABAI - PREMIUM
+# =========================================
+
 st.dataframe(
     data[kolom],
+
     use_container_width=True,
-    hide_index=True
+
+    hide_index=True,
+
+    height=520,
+
+    column_config={
+
+        "tahun": st.column_config.NumberColumn(
+            "Tahun",
+            format="%.0f"
+        ),
+
+        "bulan": st.column_config.TextColumn(
+            "Bulan"
+        ),
+
+        "kabupaten": st.column_config.TextColumn(
+            "Kabupaten"
+        ),
+
+        "komoditas": st.column_config.TextColumn(
+            "Jenis Komoditas"
+        ),
+
+        "luas_panen_ha": st.column_config.NumberColumn(
+            "Luas Panen (Ha)",
+            format="%.2f"
+        ),
+
+        "produksi_ton": st.column_config.NumberColumn(
+            "Produksi (Ton)",
+            format="%.2f"
+        ),
+
+        "produktivitas_ton_ha": st.column_config.NumberColumn(
+            "Produktivitas (Ton/Ha)",
+            format="%.2f"
+        )
+    }
 )
 
 # DOWNLOAD DATA
