@@ -37,39 +37,37 @@ st.markdown(
     }
 
    
+
 .stApp {
     background: linear-gradient(
         135deg,
-        #0B1422 0%,
-        #14263D 55%,
-        #1B314B 100%
-    );
+        #315F7D 0%,
+        #3D6E8E 55%,
+        #477B9C 100%
+    ) !important;
 
-    color: #EDF3F8;
+    color: #FFFFFF;
 }
 
 [data-testid="stAppViewContainer"] {
-    background: transparent;
+    background: transparent !important;
 }
 
 [data-testid="stHeader"] {
-    background: rgba(11, 20, 34, 0.95);
-}
-
-[data-testid="stHeader"] * {
-    color: #FFFFFF !important;
+    background: transparent !important;
 }
 
 /* =========================================
    2. WARNA TEKS UTAMA - MIDNIGHT NAVY
 ========================================= */
 
+
 .main,
 .main p,
 .main li,
 .main label,
 .main [data-testid="stMarkdownContainer"] {
-    color: #EDF3F8 !important;
+    color: #F5F8FC !important;
 }
 
 .main h1,
@@ -80,16 +78,7 @@ st.markdown(
 }
 
 .main [data-testid="stCaptionContainer"] {
-    color: #AEBFD1 !important;
-}
-
-.main a {
-    color: #79C99A !important;
-}
-
-.main strong,
-.main b {
-    color: #FFFFFF !important;
+    color: #E0EAF2 !important;
 }
 
     /* =========================================
@@ -162,49 +151,36 @@ st.markdown(
    KARTU STATISTIK - PREMIUM DESIGN
 ========================================= */
 
+
 [data-testid="stMetric"] {
-    [data-testid="stMetricValue"] {
-    color: #16472E !important;
-}
-    border: 1px solid #D6E7DA !important;
+    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+
+    border: 1px solid #DCE5EB !important;
     border-left: 5px solid #238653 !important;
 
     border-radius: 18px !important;
     padding: 24px 22px !important;
-
     min-height: 145px;
 
-    box-shadow: 0 6px 20px
-        rgba(25, 75, 45, 0.07) !important;
-
-    transition: all 0.25s ease;
+    box-shadow: 0 8px 22px
+        rgba(15, 35, 55, 0.13) !important;
 }
 
-[data-testid="stMetric"]:hover {
-    transform: translateY(-4px);
-
-    box-shadow: 0 12px 26px
-        rgba(25, 75, 45, 0.13) !important;
-
-    border-color: #91BDA0 !important;
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] * {
+    color: #526273 !important;
 }
 
-[data-testid="stMetricLabel"] {
-    color: #587462 !important;
-    font-size: 13px !important;
-    font-weight: 750 !important;
-    letter-spacing: 0.4px;
-}
-
-[data-testid="stMetricValue"] {
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] * {
     color: #16472E !important;
     font-size: 30px !important;
     font-weight: 850 !important;
-    letter-spacing: -0.5px;
 }
 
 [data-testid="stMetricDelta"] {
-    font-weight: 700 !important;
+    color: #238653 !important;
 }
 
     /* =========================================
