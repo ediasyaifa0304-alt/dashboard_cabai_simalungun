@@ -194,7 +194,10 @@ st.markdown(
 
 st.sidebar.markdown("### 🌶️ SIMALUNGUN DASHBOARD")
 st.sidebar.caption("Pusat Informasi Produksi Cabai")
-
+st.markdown(
+    '<div id="ringkasan-dashboard"></div>',
+    unsafe_allow_html=True
+)
 st.sidebar.markdown(
     """
     <div style="display:flex; flex-direction:column; gap:8px;">
@@ -354,7 +357,10 @@ bulan_nama = {
 urutan_bulan = list(bulan_nama.values())
 
 data["nama_bulan"] = data["bulan"].map(bulan_nama)
-
+st.markdown(
+    '<div id="grafik-bulanan"></div>',
+    unsafe_allow_html=True
+)
 # GRAFIK PRODUKSI BULANAN
 st.divider()
 st.header("Grafik Produksi Cabai Bulanan")
@@ -386,7 +392,10 @@ fig1 = px.line(
 
 st.plotly_chart(fig1, use_container_width=True)
 
-
+st.markdown(
+    '<div id="perbandingan-tahunan"></div>',
+    unsafe_allow_html=True
+)
 # GRAFIK PRODUKSI TAHUNAN
 st.header("Perbandingan Produksi Tahunan")
 
@@ -408,7 +417,10 @@ fig2 = px.bar(
 
 st.plotly_chart(fig2, use_container_width=True)
 
-
+st.markdown(
+    '<div id="kontribusi-komoditas"></div>',
+    unsafe_allow_html=True
+)
 # GRAFIK KOMODITAS
 st.header("Produksi Berdasarkan Komoditas")
 
@@ -434,7 +446,10 @@ fig3 = px.bar(
 
 st.plotly_chart(fig3, use_container_width=True)
 
-
+st.markdown(
+    '<div id="produktivitas-lahan"></div>',
+    unsafe_allow_html=True
+)
 # GRAFIK LUAS PANEN
 st.header("Perkembangan Luas Panen")
 
@@ -465,7 +480,10 @@ fig4 = px.line(
 
 st.plotly_chart(fig4, use_container_width=True)
 
-
+st.markdown(
+    '<div id="data-bulanan"></div>',
+    unsafe_allow_html=True
+)
 # TABEL DATA
 st.divider()
 st.header("Tabel Data Produksi Cabai")
@@ -504,7 +522,10 @@ st.caption(
     "berdasarkan dataset latihan, bukan observasi "
     "bulanan resmi."
 )
-
+st.markdown(
+    '<div id="analisis-tren-komoditas"></div>',
+    unsafe_allow_html=True
+)
 st.divider()
 st.header("Analisis Otomatis Produksi Cabai")
 
