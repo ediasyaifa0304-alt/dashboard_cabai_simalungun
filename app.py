@@ -1772,3 +1772,7 @@ with col_excel:
         use_container_width=True,
         key="download_laporan_excel"
     )
+# REFRESH DATA NEON
+if st.sidebar.button("🔄 Muat Ulang Data", use_container_width=True):
+    st.cache_data.clear()
+    st.rerun()
