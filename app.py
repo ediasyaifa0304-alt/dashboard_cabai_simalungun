@@ -1429,48 +1429,94 @@ else:
     komoditas_tertinggi = produksi_komoditas.idxmax()
     nilai_komoditas = produksi_komoditas.max()
 
-    # TAMPILAN METRIK
-    col1, col2, col3 = st.columns(3)
+   
+# =========================================
+# KARTU ANALISIS STATISTIK - PREMIUM
+# =========================================
 
-    col1.metric(
-        "Tahun Produksi Tertinggi",
-        str(int(tahun_tertinggi)),
-        f"{nilai_tertinggi:,.0f} Ton"
+st.subheader("Indikator Analisis Produksi")
+
+col1, col2, col3 = st.columns(3)
+
+# KARTU 1
+with col1:
+    with st.container(border=True):
+        st.metric(
+            "Tahun Produksi Tertinggi",
+            str(int(tahun_tertinggi))
+        )
+
+        st.caption(
+            f"Total produksi: {nilai_tertinggi:,.2f} Ton"
+        )
+
+# KARTU 2
+with col2:
+    with st.container(border=True):
+        st.metric(
+            "Tahun Produksi Terendah",
+            str(int(tahun_terendah))
+        )
+
+        st.caption(
+            f"Total produksi: {nilai_terendah:,.2f} Ton"
+        )
+
+# KARTU 3
+with col3:
+    with st.container(border=True):
+        st.metric(
+            "Komoditas Produksi Terbesar",
+            str(komoditas_tertinggi)
+        )
+
+        st.caption(
+            f"Total produksi: {nilai_komoditas:,.2f} Ton"
+        )
+
+    
+# =========================================
+# RINGKASAN TEMUAN AKADEMIK
+# =========================================
+
+st.subheader("Ringkasan Temuan dan Interpretasi")
+
+with st.container(border=True):
+
+    st.markdown(
+        "**Interpretasi Statistik Deskriptif**"
     )
-
-    col2.metric(
-        "Tahun Produksi Terendah",
-        str(int(tahun_terendah)),
-        f"{nilai_terendah:,.0f} Ton"
-    )
-
-    col3.metric(
-        "Komoditas Terbesar",
-        str(komoditas_tertinggi),
-        f"{nilai_komoditas:,.0f} Ton"
-    )
-
-    # NARASI ANALISIS
-    st.subheader("Ringkasan Temuan")
 
     st.write(
-        f"Berdasarkan filter yang dipilih, "
+        f"Berdasarkan data yang memenuhi filter analisis, "
         f"produksi cabai tertinggi tercatat pada tahun "
-        f"**{tahun_tertinggi}** sebesar "
-        f"**{nilai_tertinggi:,.0f} ton**."
+        f"**{int(tahun_tertinggi)}**, dengan total produksi "
+        f"sebesar **{nilai_tertinggi:,.2f} ton**."
     )
+
+    st.divider()
 
     st.write(
         f"Produksi terendah tercatat pada tahun "
-        f"**{tahun_terendah}** sebesar "
-        f"**{nilai_terendah:,.0f} ton**."
+        f"**{int(tahun_terendah)}**, dengan total produksi "
+        f"sebesar **{nilai_terendah:,.2f} ton**."
     )
 
+    st.divider()
+
     st.write(
-        f"Komoditas dengan kontribusi produksi terbesar "
-        f"adalah **{komoditas_tertinggi}**, "
-        f"dengan total produksi "
-        f"**{nilai_komoditas:,.0f} ton**."
+        f"Ditinjau berdasarkan kelompok komoditas, "
+        f"**{komoditas_tertinggi}** merupakan komoditas "
+        f"dengan total produksi terbesar, yaitu "
+        f"**{nilai_komoditas:,.2f} ton** "
+        f"pada data yang dianalisis."
+    )
+
+    st.caption(
+        "Catatan: Temuan ini merupakan hasil analisis "
+        "statistik deskriptif berdasarkan data dan filter "
+        "yang sedang dipilih. Hasil ini tidak secara "
+        "langsung menjelaskan hubungan sebab-akibat."
     )
 
     # PERUBAHAN PRODUKSI TAHUN AWAL DAN AKHIR
