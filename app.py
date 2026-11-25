@@ -1047,4 +1047,3 @@ else:
             "dibagi total luas panen. Nilai ini menunjukkan hasil "
             "produksi per hektare, bukan efisiensi biaya atau keuntungan."
         )
-        )
