@@ -1,4 +1,4 @@
-
+import textwrap
 import streamlit as st
 import pandas as pd
 import psycopg2
@@ -323,11 +323,9 @@ st.markdown(
 # =========================================
 # MENU NAVIGASI DASHBOARD - PREMIUM
 # =========================================
-
 st.sidebar.markdown(
-    """
+    textwrap.dedent("""
     <style>
-
     .sb-brand {
         display: flex;
         align-items: center;
