@@ -748,3 +748,302 @@ else:
             "Kontribusi dihitung berdasarkan total produksi "
             "dalam periode dan komoditas yang dipilih."
         )
+
+# =====================================================
+# ANALISIS PRODUKTIVITAS DAN LUAS PANEN
+# =====================================================
+
+st.divider()
+
+st.header("Analisis Produktivitas dan Efisiensi Luas Panen")
+
+if data.empty:
+    st.info("Belum tersedia data untuk dianalisis.")
+
+else:
+    analisis_lahan = data.copy()
+
+    # MENYESUAIKAN NAMA KOLOM LUAS PANEN
+    if "luas_panen_ha" in analisis_lahan.columns:
+        kolom_luas = "luas_panen_ha"
+    elif "luas_lahan_ha" in analisis_lahan.columns:
+        kolom_luas = "luas_lahan_ha"
+    else:
+        st.error("Kolom luas panen tidak ditemukan.")
+        st.stop()
+
+    # KONVERSI NUMERIK
+    analisis_lahan["luas_analisis"] = pd.to_numeric(
+        analisis_lahan[kolom_luas],
+        errors="coerce"
+    )
+
+    analisis_lahan["produksi_analisis"] = pd.to_numeric(
+        analisis_lahan["produksi_ton"],
+        errors="coerce"
+    )
+
+    analisis_lahan = analisis_lahan.dropna(
+        subset=["luas_analisis", "produksi_analisis"]
+    )
+
+    analisis_lahan = analisis_lahan[
+        (analisis_lahan["luas_analisis"] > 0) &
+        (analisis_lahan["produksi_analisis"] >= 0)
+    ]
+
+    if analisis_lahan.empty:
+        st.warning(
+            "Tidak tersedia data luas panen dan produksi "
+            "yang valid untuk menghitung produktivitas."
+        )
+
+    else:
+
+        # =============================================
+        # RINGKASAN PRODUKTIVITAS
+        # =============================================
+
+        total_luas_analisis = (
+            analisis_lahan["luas_analisis"].sum()
+        )
+
+        total_produksi_analisis = (
+            analisis_lahan["produksi_analisis"].sum()
+        )
+
+        produktivitas_tertimbang = (
+            total_produksi_analisis /
+            total_luas_analisis
+        )
+
+        st.subheader("Ringkasan Produktivitas")
+
+        p1, p2, p3 = st.columns(3)
+
+        p1.metric(
+            "Total Luas Panen",
+            f"{total_luas_analisis:,.2f} Ha"
+        )
+
+        p2.metric(
+            "Total Produksi",
+            f"{total_produksi_analisis:,.2f} Ton"
+        )
+
+        p3.metric(
+            "Produktivitas Tertimbang",
+            f"{produktivitas_tertimbang:,.2f} Ton/Ha"
+        )
+
+        # =============================================
+        # PRODUKTIVITAS BERDASARKAN KOMODITAS
+        # =============================================
+
+        st.subheader(
+            "Produktivitas Berdasarkan Komoditas"
+        )
+
+        produktivitas_lahan = (
+            analisis_lahan.groupby(
+                "komoditas",
+                as_index=False
+            )
+            .agg(
+                total_luas=(
+                    "luas_analisis", "sum"
+                ),
+                total_produksi=(
+                    "produksi_analisis", "sum"
+                )
+            )
+        )
+
+        produktivitas_lahan = produktivitas_lahan[
+            produktivitas_lahan["total_luas"] > 0
+        ].copy()
+
+        produktivitas_lahan[
+            "produktivitas_tertimbang"
+        ] = (
+            produktivitas_lahan["total_produksi"] /
+            produktivitas_lahan["total_luas"]
+        )
+
+        produktivitas_lahan = (
+            produktivitas_lahan.sort_values(
+                "produktivitas_tertimbang",
+                ascending=False
+            )
+        )
+
+        fig_lahan = px.bar(
+            produktivitas_lahan,
+            x="komoditas",
+            y="produktivitas_tertimbang",
+            color="komoditas",
+            text="produktivitas_tertimbang",
+            labels={
+                "komoditas": "Jenis Cabai",
+                "produktivitas_tertimbang": "Ton/Ha"
+            },
+            title="Produktivitas Tertimbang Setiap Komoditas"
+        )
+
+        fig_lahan.update_traces(
+            texttemplate="%{text:.2f}",
+            textposition="outside"
+        )
+
+        fig_lahan.update_layout(
+            height=400,
+            margin=dict(
+                l=10, r=10, t=60, b=10
+            ),
+            showlegend=False
+        )
+
+        st.plotly_chart(
+            fig_lahan,
+            use_container_width=True
+        )
+
+        # =============================================
+        # PERINGKAT PRODUKTIVITAS
+        # =============================================
+
+        st.subheader("Peringkat Produktivitas")
+
+        tabel_produktivitas = (
+            produktivitas_lahan[
+                [
+                    "komoditas",
+                    "total_luas",
+                    "total_produksi",
+                    "produktivitas_tertimbang"
+                ]
+            ]
+            .rename(
+                columns={
+                    "komoditas": "Komoditas",
+                    "total_luas": "Total Luas Panen (Ha)",
+                    "total_produksi": "Total Produksi (Ton)",
+                    "produktivitas_tertimbang":
+                        "Produktivitas (Ton/Ha)"
+                }
+            )
+            .reset_index(drop=True)
+        )
+
+        tabel_produktivitas.index += 1
+
+        st.dataframe(
+            tabel_produktivitas,
+            use_container_width=True
+        )
+
+        # =============================================
+        # PRODUKTIVITAS TAHUNAN
+        # =============================================
+
+        st.subheader(
+            "Perkembangan Produktivitas Tahunan"
+        )
+
+        tahunan_lahan = (
+            analisis_lahan.groupby(
+                ["tahun", "komoditas"],
+                as_index=False
+            )
+            .agg(
+                total_luas=(
+                    "luas_analisis", "sum"
+                ),
+                total_produksi=(
+                    "produksi_analisis", "sum"
+                )
+            )
+        )
+
+        tahunan_lahan = tahunan_lahan[
+            tahunan_lahan["total_luas"] > 0
+        ].copy()
+
+        tahunan_lahan[
+            "produktivitas_tertimbang"
+        ] = (
+            tahunan_lahan["total_produksi"] /
+            tahunan_lahan["total_luas"]
+        )
+
+        fig_tahunan_lahan = px.line(
+            tahunan_lahan,
+            x="tahun",
+            y="produktivitas_tertimbang",
+            color="komoditas",
+            markers=True,
+            labels={
+                "tahun": "Tahun",
+                "produktivitas_tertimbang": "Ton/Ha",
+                "komoditas": "Jenis Cabai"
+            },
+            title="Tren Produktivitas Cabai Tahun ke Tahun"
+        )
+
+        fig_tahunan_lahan.update_layout(
+            height=400,
+            hovermode="x unified",
+            margin=dict(
+                l=10, r=10, t=60, b=10
+            )
+        )
+
+        st.plotly_chart(
+            fig_tahunan_lahan,
+            use_container_width=True
+        )
+
+        # =============================================
+        # INSIGHT OTOMATIS
+        # =============================================
+
+        st.subheader(
+            "Insight Produktivitas Lahan"
+        )
+
+        komoditas_terbaik = produktivitas_lahan.iloc[0]
+
+        komoditas_terendah = produktivitas_lahan.iloc[-1]
+
+        i1, i2 = st.columns(2)
+
+        i1.metric(
+            "Produktivitas Tertinggi",
+            komoditas_terbaik["komoditas"],
+            f'{komoditas_terbaik["produktivitas_tertimbang"]:.2f} Ton/Ha'
+        )
+
+        i2.metric(
+            "Produktivitas Terendah",
+            komoditas_terendah["komoditas"],
+            f'{komoditas_terendah["produktivitas_tertimbang"]:.2f} Ton/Ha'
+        )
+
+        st.write(
+            f"Berdasarkan data dan filter yang dipilih, "
+            f"**{komoditas_terbaik['komoditas']}** memiliki "
+            f"produktivitas tertimbang tertinggi sebesar "
+            f"**{komoditas_terbaik['produktivitas_tertimbang']:.2f} ton/ha**."
+        )
+
+        st.write(
+            f"Sementara itu, **{komoditas_terendah['komoditas']}** "
+            f"memiliki produktivitas tertimbang terendah sebesar "
+            f"**{komoditas_terendah['produktivitas_tertimbang']:.2f} ton/ha**."
+        )
+
+        st.caption(
+            "Produktivitas tertimbang dihitung dari total produksi "
+            "dibagi total luas panen. Nilai ini menunjukkan hasil "
+            "produksi per hektare, bukan efisiensi biaya atau keuntungan."
+        )
