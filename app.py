@@ -39,10 +39,12 @@ st.markdown(
    
 
 
+
 .stApp {
-    background: #E5E7E8 !important;
-    color: #24352B !important;
+    background: #F4F1EC !important;
+    color: #263238 !important;
 }
+
 
 [data-testid="stAppViewContainer"] {
     background: transparent !important;
@@ -53,7 +55,10 @@ st.markdown(
 }
 
 
-/* WARNA TEKS UTAMA - SILVER GRAY */
+
+/* =========================================
+   2. WARNA TEKS UTAMA - CHILI PREMIUM
+========================================= */
 
 .main,
 .main p,
@@ -61,154 +66,169 @@ st.markdown(
 .main label,
 .main [data-testid="stMarkdownContainer"],
 .main [data-testid="stCaptionContainer"] {
-    color: #26392E !important;
+    color: #263238 !important;
 }
 
-.main h1,
+.main h1 {
+    color: #7A1C1C !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.8px;
+}
+
 .main h2,
 .main h3 {
-    color: #16472E !important;
+    color: #8E1B1B !important;
     font-weight: 800 !important;
 }
 
 .main strong,
 .main b {
-    color: #123B2B !important;
+    color: #651414 !important;
 }
 
 .main a {
-    color: #176B43 !important;
+    color: #C62828 !important;
 }
 
-    /* =========================================
-       3. SIDEBAR HIJAU TUA
-    ========================================= */
+ 
+/* =========================================
+   3. SIDEBAR - CHILI MAROON
+========================================= */
 
-    section[data-testid="stSidebar"] {
-        background: linear-gradient(
-            180deg,
-            #123B2B 0%,
-            #1D563B 100%
-        );
-        border-right: 1px solid #24583A;
-    }
+section[data-testid="stSidebar"] {
+    background: linear-gradient(
+        180deg,
+        #651414 0%,
+        #8E1B1B 100%
+    ) !important;
 
-    section[data-testid="stSidebar"] > div {
-        padding-top: 1.5rem;
-    }
+    border-right: 1px solid #5A1010;
+}
 
-    section[data-testid="stSidebar"] h1,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3,
-    section[data-testid="stSidebar"] p {
-        color: #F4F8F4 !important;
-    }
+section[data-testid="stSidebar"] > div {
+    background: transparent !important;
+    padding-top: 1.5rem;
+}
 
-    section[data-testid="stSidebar"]
-    [data-testid="stCaptionContainer"] {
-        color: #D1E3D5 !important;
-    }
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] p {
+    color: #FFFFFF !important;
+}
 
-    section[data-testid="stSidebar"]
-    [data-testid="stWidgetLabel"] p {
-        color: #F4F8F4 !important;
-        font-weight: 600;
-    }
+section[data-testid="stSidebar"]
+[data-testid="stCaptionContainer"] {
+    color: #F2DADA !important;
+}
 
-    section[data-testid="stSidebar"]
-    [data-baseweb="select"] > div {
-        background: #FFFFFF !important;
-        border: 1px solid #CFE0D2 !important;
-        border-radius: 9px;
-    }
+section[data-testid="stSidebar"]
+[data-testid="stWidgetLabel"] p {
+    color: #FFFFFF !important;
+    font-weight: 700;
+}
 
-    section[data-testid="stSidebar"]
-    [data-baseweb="select"] input {
-        color: #193D2B !important;
-    }
+section[data-testid="stSidebar"]
+[data-baseweb="select"] > div {
+    background: #FFFFFF !important;
+    border: 1px solid #E8D2D2 !important;
+    border-radius: 9px;
+}
 
-    section[data-testid="stSidebar"]
-    [data-baseweb="tag"] {
-        background: #E1F0E5 !important;
-    }
+section[data-testid="stSidebar"]
+[data-baseweb="select"] input {
+    color: #3B2222 !important;
+}
 
-    section[data-testid="stSidebar"]
-    [data-baseweb="tag"] span {
-        color: #1B4A32 !important;
-    }
+section[data-testid="stSidebar"]
+[data-baseweb="tag"] {
+    background: #FCE8E6 !important;
+}
 
-    section[data-testid="stSidebar"]
-    .stButton > button {
-        background: #F2F7F2;
-        color: #17452D !important;
-        border: 1px solid #D5E4D8;
-        font-weight: 700;
-    }
+section[data-testid="stSidebar"]
+[data-baseweb="tag"] span {
+    color: #8E1B1B !important;
+}
+
+section[data-testid="stSidebar"]
+.stButton > button {
+    background: #FFFFFF !important;
+    color: #8E1B1B !important;
+    border: 1px solid #E8D2D2;
+    font-weight: 700;
+}
 
 
 /* =========================================
-   KARTU STATISTIK - PREMIUM DESIGN
+   4. KARTU STATISTIK - CHILI PREMIUM
 ========================================= */
-
 
 [data-testid="stMetric"] {
     background: #FFFFFF !important;
-    background-color: #FFFFFF !important;
 
-    border: 1px solid #DCE5EB !important;
-    border-left: 5px solid #238653 !important;
+    border: 1px solid #E7D9D5 !important;
+    border-left: 5px solid #C62828 !important;
 
     border-radius: 18px !important;
     padding: 24px 22px !important;
     min-height: 145px;
 
-    box-shadow: 0 8px 22px
-        rgba(15, 35, 55, 0.13) !important;
+    box-shadow: 0 6px 20px
+        rgba(100, 25, 25, 0.08) !important;
+
+    transition: all 0.25s ease;
 }
 
-[data-testid="stMetricLabel"],
-[data-testid="stMetricLabel"] * {
-    color: #526273 !important;
+[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    border-color: #D88B83 !important;
+
+    box-shadow: 0 12px 26px
+        rgba(100, 25, 25, 0.13) !important;
 }
 
-[data-testid="stMetricValue"],
-[data-testid="stMetricValue"] * {
-    color: #16472E !important;
+[data-testid="stMetricLabel"] {
+    color: #667085 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.4px;
+}
+
+[data-testid="stMetricValue"] {
+    color: #8E1B1B !important;
     font-size: 30px !important;
     font-weight: 850 !important;
+    letter-spacing: -0.5px;
 }
 
 [data-testid="stMetricDelta"] {
-    color: #238653 !important;
+    color: #2E7D32 !important;
+    font-weight: 700 !important;
 }
-
     /* =========================================
        5. TOMBOL
     ========================================= */
 
-    .stButton > button,
-    .stDownloadButton > button {
-        background: #FFFFFF;
-        color: #1E5B3A !important;
-        border-radius: 11px;
-        border: 1px solid #BFD5C4;
-        font-weight: 700;
-        min-height: 43px;
-        transition: all 0.2s ease;
-    }
 
-    .stButton > button:hover,
-    .stDownloadButton > button:hover {
-        background: #EAF4EC;
-        border-color: #287A48;
-        color: #17452D !important;
-    }
+.stButton > button,
+.stDownloadButton > button {
+    background: #8E1B1B !important;
+    color: #FFFFFF !important;
 
+    border-radius: 11px;
+    border: 1px solid #8E1B1B;
+    font-weight: 700;
+    min-height: 43px;
 
-    /* =========================================
-       6. TAB NAVIGASI
-    ========================================= */
+    transition: all 0.2s ease;
+}
 
+.stButton > button:hover,
+.stDownloadButton > button:hover {
+    background: #C62828 !important;
+    border-color: #C62828 !important;
+    color: #FFFFFF !important;
+}
     
 /* =========================================
    6. TAB NAVIGASI - NAVY CORPORATE
@@ -216,19 +236,19 @@ st.markdown(
 
 .stTabs [data-baseweb="tab-list"] {
     gap: 8px;
-    border-bottom: 1px solid #40536B;
+    border-bottom: 1px solid #E7D9D5;
 }
 
 .stTabs [data-baseweb="tab"] {
-    background: #263A52;
-    color: #E4ECF5 !important;
+    background: #F5E8E5;
+    color: #7A1C1C !important;
     border-radius: 10px 10px 0 0;
     padding: 11px 17px;
     font-weight: 700;
 }
 
 .stTabs [aria-selected="true"] {
-    background: #1D6A43 !important;
+    background: #8E1B1B !important;
     color: #FFFFFF !important;
 }
 
@@ -236,62 +256,41 @@ st.markdown(
     color: #FFFFFF !important;
 }
 
+/* 7. KARTU GRAFIK */
 
-    /* =========================================
-       7. KARTU GRAFIK
-    ========================================= */
+div[data-testid="stPlotlyChart"] {
+    background: #FFFFFF !important;
+    border: 1px solid #E7D9D5;
+    border-radius: 17px;
+    padding: 12px;
+    box-shadow: 0 4px 15px
+        rgba(80, 30, 30, 0.06);
+}
 
-    div[data-testid="stPlotlyChart"] {
-        background: #FFFFFF;
-        border: 1px solid #DFEAE1;
-        border-radius: 17px;
-        padding: 12px;
-        box-shadow: 0 4px 15px rgba(30, 70, 45, 0.05);
-    }
+/* 8. TABEL DATA */
 
+div[data-testid="stDataFrame"] {
+    background: #FFFFFF !important;
+    border: 1px solid #E7D9D5;
+    border-radius: 13px;
+    overflow: hidden;
+}
 
-    /* =========================================
-       8. TABEL DATA
-    ========================================= */
-
-    div[data-testid="stDataFrame"] {
-        background: #FFFFFF;
-        border: 1px solid #DCE8DE;
-        border-radius: 13px;
-        overflow: hidden;
-    }
-
-
-    
-/* =========================================
-   9. EXPANDER
-========================================= */
+/* 9. EXPANDER */
 
 div[data-testid="stExpander"] {
-    background: #FFFFFF;
-    border: 1px solid #40536B;
+    background: #FFFFFF !important;
+    border: 1px solid #E7D9D5;
     border-radius: 13px;
 }
 
-div[data-testid="stExpander"],
-div[data-testid="stExpander"] p,
-div[data-testid="stExpander"] li,
-div[data-testid="stExpander"] label,
-div[data-testid="stExpander"] [data-testid="stMarkdownContainer"] {
-    color: #263747 !important;
-}
+/* 10. PEMBATAS */
 
-
-    /* =========================================
-       10. PEMBATAS
-    ========================================= */
-
-  hr {
-    border-color: #C5CCD1;
+hr {
+    border-color: #D9CBC6;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
 }
-
     /* =========================================
        11. RESPONSIVE MOBILE
     ========================================= */
@@ -438,14 +437,19 @@ html, body {
     min-height: 310px;
     padding: 36px 42px;
     border-radius: 23px;
-    background: linear-gradient(
-        120deg,
-        #103D2C 0%,
-        #176342 55%,
-        #39885C 100%
-    );
-    box-shadow: 0 12px 30px rgba(18,59,43,0.14);
-    border: 1px solid rgba(255,255,255,0.12);
+    
+background: linear-gradient(
+    120deg,
+    #6F1515 0%,
+    #991B1B 55%,
+    #C62828 100%
+);
+
+box-shadow: 0 12px 30px
+    rgba(142, 27, 27, 0.18);
+
+border: 1px solid rgba(255,255,255,0.16);
+
 }
 
 .hero-content {
