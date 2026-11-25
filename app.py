@@ -25,139 +25,271 @@ st.set_page_config(
     layout="wide"
 )
 
-# =====================================================
-# DESAIN PROFESIONAL DASHBOARD SIM-PETANI
-# =====================================================
-
 st.markdown(
     """
     <style>
 
-    /* BACKGROUND UTAMA */
-    .stApp {
-        background-color: #F5F8F5;
+    /* =========================================
+       1. BACKGROUND UTAMA
+    ========================================= */
+
+    :root {
+        color-scheme: light;
     }
 
-    /* AREA KONTEN */
+    .stApp {
+        background: linear-gradient(
+            135deg,
+            #F3F7F2 0%,
+            #EAF2EC 52%,
+            #F8FAF7 100%
+        );
+        color: #24372C;
+    }
+
+    [data-testid="stAppViewContainer"] {
+        background: transparent;
+    }
+
+    [data-testid="stHeader"] {
+        background: transparent;
+    }
+
     .block-container {
-        max-width: 1450px;
-        padding-top: 2rem;
+        max-width: 1500px;
+        padding-top: 1.7rem;
         padding-bottom: 3rem;
     }
 
-    /* SIDEBAR */
+
+    /* =========================================
+       2. WARNA TEKS UTAMA
+    ========================================= */
+
+    .main,
+    .main p,
+    .main li,
+    .main label,
+    .main [data-testid="stMarkdownContainer"],
+    .main [data-testid="stCaptionContainer"] {
+        color: #26392E !important;
+    }
+
+    .main h1 {
+        color: #17452D !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.8px;
+    }
+
+    .main h2,
+    .main h3 {
+        color: #24583A !important;
+        font-weight: 750 !important;
+    }
+
+
+    /* =========================================
+       3. SIDEBAR HIJAU TUA
+    ========================================= */
+
     section[data-testid="stSidebar"] {
-        background: #FFFFFF;
-        border-right: 1px solid #E3EBE4;
+        background: linear-gradient(
+            180deg,
+            #123B2B 0%,
+            #1D563B 100%
+        );
+        border-right: 1px solid #24583A;
     }
 
     section[data-testid="stSidebar"] > div {
         padding-top: 1.5rem;
     }
 
-    /* JUDUL UTAMA */
-    h1 {
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] p {
+        color: #F4F8F4 !important;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-testid="stCaptionContainer"] {
+        color: #D1E3D5 !important;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-testid="stWidgetLabel"] p {
+        color: #F4F8F4 !important;
+        font-weight: 600;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-baseweb="select"] > div {
+        background: #FFFFFF !important;
+        border: 1px solid #CFE0D2 !important;
+        border-radius: 9px;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-baseweb="select"] input {
+        color: #193D2B !important;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-baseweb="tag"] {
+        background: #E1F0E5 !important;
+    }
+
+    section[data-testid="stSidebar"]
+    [data-baseweb="tag"] span {
+        color: #1B4A32 !important;
+    }
+
+    section[data-testid="stSidebar"]
+    .stButton > button {
+        background: #F2F7F2;
         color: #17452D !important;
-        font-weight: 800 !important;
-        letter-spacing: -0.7px;
+        border: 1px solid #D5E4D8;
+        font-weight: 700;
     }
 
-    /* SUBJUDUL */
-    h2, h3 {
-        color: #24583A !important;
-        font-weight: 700 !important;
-    }
 
-    /* KARTU STATISTIK */
+    /* =========================================
+       4. KARTU STATISTIK
+    ========================================= */
+
     [data-testid="stMetric"] {
-        background: #FFFFFF;
-        border: 1px solid #E1EAE2;
-        border-radius: 16px;
+        background: linear-gradient(
+            145deg,
+            #FFFFFF,
+            #F4F9F5
+        );
+        border: 1px solid #DCE8DE;
+        border-radius: 18px;
         padding: 20px;
-        box-shadow: 0 3px 12px rgba(30, 70, 45, 0.05);
+        box-shadow: 0 5px 18px rgba(30, 70, 45, 0.07);
         transition: all 0.2s ease;
     }
 
     [data-testid="stMetric"]:hover {
-        border-color: #A9CBB2;
-        box-shadow: 0 5px 16px rgba(30, 70, 45, 0.10);
+        transform: translateY(-3px);
+        border-color: #9DBFA5;
+        box-shadow: 0 8px 22px rgba(30, 70, 45, 0.12);
     }
 
     [data-testid="stMetricLabel"] {
-        color: #637568 !important;
-        font-weight: 600;
+        color: #5C7162 !important;
+        font-weight: 650;
     }
 
     [data-testid="stMetricValue"] {
         color: #17452D !important;
-        font-size: 1.8rem !important;
+        font-size: 1.85rem !important;
         font-weight: 800 !important;
     }
 
-    /* TOMBOL */
+
+    /* =========================================
+       5. TOMBOL
+    ========================================= */
+
     .stButton > button,
     .stDownloadButton > button {
-        border-radius: 10px;
-        border: 1px solid #D5E4D8;
-        font-weight: 600;
-        min-height: 42px;
+        background: #FFFFFF;
+        color: #1E5B3A !important;
+        border-radius: 11px;
+        border: 1px solid #BFD5C4;
+        font-weight: 700;
+        min-height: 43px;
         transition: all 0.2s ease;
     }
 
     .stButton > button:hover,
     .stDownloadButton > button:hover {
+        background: #EAF4EC;
         border-color: #287A48;
-        color: #287A48;
-        background-color: #F0F7F1;
+        color: #17452D !important;
     }
 
-    /* TAB NAVIGASI */
+
+    /* =========================================
+       6. TAB NAVIGASI
+    ========================================= */
+
     .stTabs [data-baseweb="tab-list"] {
-        gap: 12px;
-        border-bottom: 1px solid #E1EAE2;
+        gap: 8px;
+        border-bottom: 1px solid #D9E6DC;
     }
 
     .stTabs [data-baseweb="tab"] {
-        font-weight: 600;
-        padding: 12px 18px;
+        background: #E8F1EA;
+        color: #315C42 !important;
+        border-radius: 10px 10px 0 0;
+        padding: 11px 17px;
+        font-weight: 700;
     }
 
-    /* GRAFIK */
+    .stTabs [aria-selected="true"] {
+        background: #1D6A43 !important;
+        color: #FFFFFF !important;
+    }
+
+    .stTabs [aria-selected="true"] * {
+        color: #FFFFFF !important;
+    }
+
+
+    /* =========================================
+       7. KARTU GRAFIK
+    ========================================= */
+
     div[data-testid="stPlotlyChart"] {
         background: #FFFFFF;
-        border: 1px solid #E5ECE6;
-        border-radius: 16px;
-        padding: 10px;
-        box-shadow: 0 3px 12px rgba(30, 70, 45, 0.04);
+        border: 1px solid #DFEAE1;
+        border-radius: 17px;
+        padding: 12px;
+        box-shadow: 0 4px 15px rgba(30, 70, 45, 0.05);
     }
 
-    /* TABEL */
+
+    /* =========================================
+       8. TABEL DATA
+    ========================================= */
+
     div[data-testid="stDataFrame"] {
-        border: 1px solid #E1EAE2;
-        border-radius: 12px;
+        background: #FFFFFF;
+        border: 1px solid #DCE8DE;
+        border-radius: 13px;
         overflow: hidden;
     }
 
-    /* EXPANDER */
+
+    /* =========================================
+       9. EXPANDER
+    ========================================= */
+
     div[data-testid="stExpander"] {
         background: #FFFFFF;
-        border: 1px solid #E1EAE2;
-        border-radius: 12px;
+        border: 1px solid #DCE8DE;
+        border-radius: 13px;
     }
 
-    /* PEMBATAS */
+
+    /* =========================================
+       10. PEMBATAS
+    ========================================= */
+
     hr {
-        border-color: #DDE8DF;
+        border-color: #D6E4D9;
         margin-top: 1.5rem;
         margin-bottom: 1.5rem;
     }
 
-    /* CAPTION */
-    .stCaption {
-        color: #718174;
-    }
 
-    /* RESPONSIVE MOBILE */
+    /* =========================================
+       11. RESPONSIVE MOBILE
+    ========================================= */
+
     @media screen and (max-width: 768px) {
 
         .block-container {
@@ -174,11 +306,11 @@ st.markdown(
             font-size: 1.3rem !important;
         }
 
-        h1 {
+        .main h1 {
             font-size: 1.7rem !important;
         }
 
-        h2 {
+        .main h2 {
             font-size: 1.35rem !important;
         }
     }
