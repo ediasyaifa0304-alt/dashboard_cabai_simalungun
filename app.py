@@ -38,15 +38,10 @@ st.markdown(
 
    
 
-.stApp {
-    background: linear-gradient(
-        135deg,
-        #315F7D 0%,
-        #3D6E8E 55%,
-        #477B9C 100%
-    ) !important;
 
-    color: #FFFFFF;
+.stApp {
+    background: #E5E7E8 !important;
+    color: #24352B !important;
 }
 
 [data-testid="stAppViewContainer"] {
@@ -57,28 +52,32 @@ st.markdown(
     background: transparent !important;
 }
 
-/* =========================================
-   2. WARNA TEKS UTAMA - MIDNIGHT NAVY
-========================================= */
 
+/* WARNA TEKS UTAMA - SILVER GRAY */
 
 .main,
 .main p,
 .main li,
 .main label,
-.main [data-testid="stMarkdownContainer"] {
-    color: #F5F8FC !important;
+.main [data-testid="stMarkdownContainer"],
+.main [data-testid="stCaptionContainer"] {
+    color: #26392E !important;
 }
 
 .main h1,
 .main h2,
 .main h3 {
-    color: #FFFFFF !important;
+    color: #16472E !important;
     font-weight: 800 !important;
 }
 
-.main [data-testid="stCaptionContainer"] {
-    color: #E0EAF2 !important;
+.main strong,
+.main b {
+    color: #123B2B !important;
+}
+
+.main a {
+    color: #176B43 !important;
 }
 
     /* =========================================
@@ -288,7 +287,7 @@ div[data-testid="stExpander"] [data-testid="stMarkdownContainer"] {
     ========================================= */
 
   hr {
-    border-color: #40536B;
+    border-color: #C5CCD1;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
 }
