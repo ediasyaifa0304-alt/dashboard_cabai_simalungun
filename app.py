@@ -154,40 +154,57 @@ st.markdown(
     }
 
 
-    /* =========================================
-       4. KARTU STATISTIK
-    ========================================= */
+/* =========================================
+   KARTU STATISTIK - PREMIUM DESIGN
+========================================= */
 
-    [data-testid="stMetric"] {
-        background: linear-gradient(
-            145deg,
-            #FFFFFF,
-            #F4F9F5
-        );
-        border: 1px solid #DCE8DE;
-        border-radius: 18px;
-        padding: 20px;
-        box-shadow: 0 5px 18px rgba(30, 70, 45, 0.07);
-        transition: all 0.2s ease;
-    }
+[data-testid="stMetric"] {
+    background: linear-gradient(
+        145deg,
+        #FFFFFF 0%,
+        #F0F8F2 100%
+    ) !important;
 
-    [data-testid="stMetric"]:hover {
-        transform: translateY(-3px);
-        border-color: #9DBFA5;
-        box-shadow: 0 8px 22px rgba(30, 70, 45, 0.12);
-    }
+    border: 1px solid #D6E7DA !important;
+    border-left: 5px solid #238653 !important;
 
-    [data-testid="stMetricLabel"] {
-        color: #5C7162 !important;
-        font-weight: 650;
-    }
+    border-radius: 18px !important;
+    padding: 24px 22px !important;
 
-    [data-testid="stMetricValue"] {
-        color: #17452D !important;
-        font-size: 1.85rem !important;
-        font-weight: 800 !important;
-    }
+    min-height: 145px;
 
+    box-shadow: 0 6px 20px
+        rgba(25, 75, 45, 0.07) !important;
+
+    transition: all 0.25s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 12px 26px
+        rgba(25, 75, 45, 0.13) !important;
+
+    border-color: #91BDA0 !important;
+}
+
+[data-testid="stMetricLabel"] {
+    color: #587462 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.4px;
+}
+
+[data-testid="stMetricValue"] {
+    color: #16472E !important;
+    font-size: 30px !important;
+    font-weight: 850 !important;
+    letter-spacing: -0.5px;
+}
+
+[data-testid="stMetricDelta"] {
+    font-weight: 700 !important;
+}
 
     /* =========================================
        5. TOMBOL
@@ -632,25 +649,76 @@ produktivitas = (
     if total_luas > 0 else 0
 )
 
+# =========================================
+# RINGKASAN DATA - PREMIUM KPI DASHBOARD
+# =========================================
+
 st.divider()
+
 st.header("Ringkasan Data")
 
-c1, c2, c3 = st.columns(3)
-
-c1.metric(
-    "Total Produksi",
-    f"{total_produksi:,.0f} Ton"
+st.caption(
+    "Indikator utama produksi cabai berdasarkan "
+    "periode dan komoditas yang dipilih."
 )
 
-c2.metric(
-    "Total Luas Panen",
-    f"{total_luas:,.0f} Ha"
+# MEMBUAT TIGA KOLOM STATISTIK
+kpi1, kpi2, kpi3 = st.columns(
+    3,
+    gap="large"
 )
 
-c3.metric(
-    "Produktivitas Tertimbang",
-    f"{produktivitas:,.0f} Ton/Ha"
-)
+# -----------------------------------------
+# KARTU 1: TOTAL PRODUKSI
+# -----------------------------------------
+
+with kpi1:
+
+    st.metric(
+        label="🌶️ TOTAL PRODUKSI",
+        value=f"{total_produksi:,.0f} Ton",
+        help="Akumulasi seluruh produksi cabai berdasarkan filter."
+    )
+
+    st.caption(
+        "Total hasil produksi seluruh komoditas terpilih."
+    )
+
+
+# -----------------------------------------
+# KARTU 2: TOTAL LUAS PANEN
+# -----------------------------------------
+
+with kpi2:
+
+    st.metric(
+        label="🌾 TOTAL LUAS PANEN",
+        value=f"{total_luas:,.0f} Ha",
+        help="Akumulasi luas panen berdasarkan filter."
+    )
+
+    st.caption(
+        "Total luas panen seluruh komoditas terpilih."
+    )
+
+
+# -----------------------------------------
+# KARTU 3: PRODUKTIVITAS
+# -----------------------------------------
+
+with kpi3:
+
+    st.metric(
+        label="📊 PRODUKTIVITAS TERTIMBANG",
+        value=f"{produktivitas:,.2f} Ton/Ha",
+        help="Total produksi dibagi total luas panen."
+    )
+
+    st.caption(
+        "Rasio produksi terhadap luas panen."
+    )
+
+st.divider()
 
 # NAMA BULAN
 bulan_nama = {
