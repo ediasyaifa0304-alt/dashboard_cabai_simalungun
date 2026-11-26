@@ -359,7 +359,21 @@ section[data-testid="stSidebar"]
 
     text-decoration: none !important;
 }
+/* =====================================
+   FIX TULISAN TOMBOL SIDEBAR
+===================================== */
 
+section[data-testid="stSidebar"] .stButton > button {
+    background: #FFFFFF !important;
+    color: #651414 !important;
+    border: 1px solid #E7B8B8 !important;
+    font-weight: 800 !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button p,
+section[data-testid="stSidebar"] .stButton > button span {
+    color: #651414 !important;
+}
     </style>
     """,
     unsafe_allow_html=True
