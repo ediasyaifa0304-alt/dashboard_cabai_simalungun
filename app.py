@@ -408,12 +408,9 @@ with brand_col:
     </div>
     """, unsafe_allow_html=True)
 
-st.sidebar.markdown("---")
-  st.sidebar.markdown("**MENU UTAMA**")
 
-st.sidebar.markdown(
-    "[🏠 Ringkasan Dashboard](#ringkasan-dashboard)"
-)
+st.sidebar.markdown("---")
+
 st.sidebar.markdown("**MENU UTAMA**")
 
 st.sidebar.markdown(
