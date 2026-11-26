@@ -369,14 +369,51 @@ section[data-testid="stSidebar"]
 # MENU NAVIGASI DASHBOARD - STABIL
 # =========================================
 
-st.sidebar.markdown("### 🌶️ SIMALUNGUN DASHBOARD")
 
-st.sidebar.caption(
-    "Pusat Informasi Produksi Cabai"
+# =========================================
+# IDENTITAS SIDEBAR - KABUPATEN SIMALUNGUN
+# =========================================
+
+logo_col, brand_col = st.sidebar.columns(
+    [1, 3],
+    gap="small"
 )
 
-st.sidebar.markdown("---")
+with logo_col:
+    st.image(
+        "logo_simalungun.png",
+        width=65
+    )
 
+with brand_col:
+    st.markdown("""
+    <div style="padding-top:5px;">
+        <div style="
+            font-size:16px;
+            font-weight:850;
+            color:#FFFFFF;
+            line-height:1.3;
+        ">
+            SIMALUNGUN<br>
+            DASHBOARD
+        </div>
+
+        <div style="
+            font-size:11px;
+            color:#F2DADA;
+            margin-top:7px;
+        ">
+            Pusat Informasi Produksi Cabai
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.sidebar.markdown("---")
+  st.sidebar.markdown("**MENU UTAMA**")
+
+st.sidebar.markdown(
+    "[🏠 Ringkasan Dashboard](#ringkasan-dashboard)"
+)
 st.sidebar.markdown("**MENU UTAMA**")
 
 st.sidebar.markdown(
